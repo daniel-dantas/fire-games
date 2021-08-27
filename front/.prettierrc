@@ -1,0 +1,6 @@
+{
+	"parser": "typescript",
+	"useTabs": true,
+	"trailingComma": "none",
+	"arrowParens": "avoid"
+}
