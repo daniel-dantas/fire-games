@@ -1,0 +1,58 @@
+
+.header {
+    width: 100vw;
+    height: 70px;
+    background-color: #000E44;
+
+    display: flex;
+
+    .content_logo{
+        width: 30vw;
+        height: 100%;
+
+
+        // background-color: red;
+    }
+
+    .content_search{
+        width: 40vw;
+        // background-color: green;
+
+        display: flex;
+        justify-content: center;
+        align-items: center;
+
+        input {
+            width: 80%;
+            height: 40px;
+        }
+
+    }
+
+    .content_links {
+        // background-color: blue;
+        width: 30vw;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+
+        a {
+            color: #ffff;
+        }
+
+        button {
+
+            cursor: pointer;
+
+            margin-left: 80px;
+
+            background-color: transparent;
+            color: #ffff;
+            border: none;
+            font-size: 16px;
+        }
+
+    }
+
+
+}
