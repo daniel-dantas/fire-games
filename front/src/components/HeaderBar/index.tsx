@@ -13,8 +13,9 @@ const HeaderBar: React.FC = () => {
 				<input placeholder="Find Game" type="text" />
 			</div>
 			<div className={styles.content_links}>
-				<Link href={"#"}>New Game</Link>
-				<Link href={"#"}>My Library</Link>
+				<Link href="/library">Library</Link>
+				<Link href="/library/new">New Game</Link>
+				<Link href="/my-library">My Library</Link>
 				<button>Logout</button>
 			</div>
 		</nav>

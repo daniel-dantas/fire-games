@@ -34,16 +34,17 @@
     .content_links {
         // background-color: blue;
         width: 30vw;
+
         display: flex;
         justify-content: center;
         align-items: center;
 
-        @media (max-width:  1400px) {
+        @media (max-width: 1400px) {
             width: 40vw;
         }
 
         * {
-            margin: 0 30px;
+            margin: 0 20px;
             font-size: 1em;
         }
 
