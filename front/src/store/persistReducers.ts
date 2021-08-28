@@ -5,7 +5,7 @@ import storage from "redux-persist/lib/storage";
 function persistReducers(reducers: any): any {
 	const persistedReducers = persistReducer(
 		{
-			key: "redux-fire-website",
+			key: "fire-games-website",
 			storage,
 			whitelist: ["login"]
 		},

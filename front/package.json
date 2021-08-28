@@ -9,6 +9,9 @@
     "lint": "next lint"
   },
   "dependencies": {
+    "@material-ui/core": "^4.12.3",
+    "@material-ui/lab": "^4.0.0-alpha.60",
+    "add": "^2.0.6",
     "next": "11.1.0",
     "next-redux-wrapper": "^7.0.2",
     "react": "17.0.2",
@@ -16,7 +19,9 @@
     "react-redux": "^7.2.4",
     "redux": "^4.1.1",
     "redux-persist": "^6.0.0",
-    "redux-thunk": "^2.3.0"
+    "redux-thunk": "^2.3.0",
+    "sass": "^1.38.1",
+    "yarn": "^1.22.11"
   },
   "devDependencies": {
     "@types/react": "17.0.19",
