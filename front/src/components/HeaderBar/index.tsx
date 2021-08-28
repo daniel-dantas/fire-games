@@ -14,6 +14,7 @@ const HeaderBar: React.FC = () => {
 			</div>
 			<div className={styles.content_links}>
 				<Link href={"#"}>New Game</Link>
+				<Link href={"#"}>My Library</Link>
 				<button>Logout</button>
 			</div>
 		</nav>

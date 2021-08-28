@@ -13,7 +13,6 @@ const GameCard: React.FC = () => {
 				<br />
 				<div className={styles.badge_content}>
 					<span className={styles.badge}>XBOX 360</span>
-					<span className={styles.badge}>Concluded</span>
 				</div>
 			</div>
 		</div>

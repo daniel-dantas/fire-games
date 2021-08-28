@@ -10,8 +10,10 @@
         width: 30vw;
         height: 100%;
 
-
         // background-color: red;
+        @media (max-width:  1400px) {
+            width: 20vw;
+        }
     }
 
     .content_search{
@@ -36,6 +38,15 @@
         justify-content: center;
         align-items: center;
 
+        @media (max-width:  1400px) {
+            width: 40vw;
+        }
+
+        * {
+            margin: 0 30px;
+            font-size: 1em;
+        }
+
         a {
             color: #ffff;
         }
@@ -44,12 +55,10 @@
 
             cursor: pointer;
 
-            margin-left: 80px;
-
             background-color: transparent;
             color: #ffff;
             border: none;
-            font-size: 16px;
+            // font-size: 16px;
         }
 
     }
