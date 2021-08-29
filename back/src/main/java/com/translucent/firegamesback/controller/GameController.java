@@ -29,7 +29,7 @@ public class GameController {
 
     @GetMapping
     public ResponseEntity<List<Game>> index () {
-        return new ResponseEntity<List<Game>>(this.gameRepository.findAll(), HttpStatus.ACCEPTED);
+        return new ResponseEntity<List<Game>>(this.gameRepository.findAll(), HttpStatus.OK);
     }
 
     @GetMapping("/{id}")
@@ -37,7 +37,7 @@ public class GameController {
         if (!this.gameRepository.existsById(id)) throw new NotFoundException("There is no game with this id");
         Game game = this.gameRepository.findById(id).get();
 
-        return new ResponseEntity<Game>(game, HttpStatus.ACCEPTED);
+        return new ResponseEntity<Game>(game, HttpStatus.OK);
     }
 
     @DeleteMapping("/{id}")
@@ -46,7 +46,7 @@ public class GameController {
 
         this.gameRepository.deleteById(id);
 
-        return new ResponseEntity( HttpStatus.ACCEPTED);
+        return new ResponseEntity(HttpStatus.OK);
     }
 
     @PutMapping("/{id}")
@@ -55,8 +55,8 @@ public class GameController {
         return gameRepository.findById(id).map(item -> {
             item = game;
             item.setId(id);
-            Game updated = gameRepository.save(item);
-            return new ResponseEntity<>(updated, HttpStatus.ACCEPTED);
+            Game updated = this.gameRepository.save(item);
+            return new ResponseEntity<>(updated, HttpStatus.OK);
         }).orElse(ResponseEntity.notFound().build());
     }
 
@@ -69,21 +69,43 @@ public class GameController {
 
         myLibrary.setGame(game);
 
-        return new ResponseEntity<MyGameAnnotation>(this.myGameRepository.save(myLibrary), HttpStatus.OK);
+        return new ResponseEntity<MyGameAnnotation>(this.myGameRepository.save(myLibrary), HttpStatus.CREATED);
 
     }
 
     @GetMapping("/myLibrary")
-    public ResponseEntity<?> myLibrary (){
-        return new ResponseEntity<>(this.myGameRepository.findAll(), HttpStatus.ACCEPTED);
+    public ResponseEntity<List<MyGameAnnotation>> myLibrary (){
+        return new ResponseEntity<>(this.myGameRepository.findAll(), HttpStatus.OK);
     }
 
     @GetMapping("/myLibrary/{id}")
-    public ResponseEntity<?> getMyAnnotation(@PathVariable("id") Long id) {
+    public ResponseEntity<MyGameAnnotation> getMyAnnotation(@PathVariable("id") Long id) {
         if (!this.myGameRepository.existsById(id)) throw new NotFoundException("There is no game with this id");
 
-        return new ResponseEntity<>(this.myGameRepository.findById(id).get(), HttpStatus.ACCEPTED);
+        return new ResponseEntity<MyGameAnnotation>(this.myGameRepository.findById(id).get(), HttpStatus.OK);
     }
 
+    @PutMapping("/myLibrary/{id}")
+    public ResponseEntity<MyGameAnnotation> editMyAnnotation (@PathVariable("id") Long id, @RequestBody MyGameAnnotation gameAnnotation) {
+        if (!this.myGameRepository.existsById(id)) throw new NotFoundException("There is no game with this id");
+
+        return this.myGameRepository.findById(id).map(item -> {
+            Game game = item.getGame();
+            item = gameAnnotation;
+            item.setId(id);
+            item.setGame(game);
+            return new ResponseEntity<MyGameAnnotation>(this.myGameRepository.save(item), HttpStatus.OK);
+        }).orElse(ResponseEntity.notFound().build());
+    }
+
+    @DeleteMapping("/myLibrary/{id}")
+    public ResponseEntity deleteMyAnnotation (@PathVariable("id") Long id) {
+        if (!this.myGameRepository.existsById(id)) throw new NotFoundException("There is no game with this id");
+
+        this.myGameRepository.deleteById(id);
+
+        return new ResponseEntity(HttpStatus.OK);
+
+    }
 
 }
