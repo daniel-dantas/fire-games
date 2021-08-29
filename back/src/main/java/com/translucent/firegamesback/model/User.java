@@ -1,5 +1,6 @@
 package com.translucent.firegamesback.model;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.sun.istack.NotNull;
 import lombok.*;
 
@@ -24,6 +25,7 @@ public class User {
     private String email;
 
     @NotNull
+    @JsonIgnore
     private String password;
 
     @OneToMany(targetEntity = MyGameAnnotation.class)
