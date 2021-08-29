@@ -1,9 +1,9 @@
 package com.translucent.firegamesback.model;
 
+import com.sun.istack.NotNull;
 import lombok.*;
 
 import javax.persistence.*;
-import javax.validation.constraints.NotNull;
 import java.time.LocalDate;
 
 @Data
@@ -24,6 +24,7 @@ public class MyGameAnnotation {
     @NotNull
     private String personal_notes;
 
+    @NotNull
     @ManyToOne
     private Game game;
 
