@@ -1,5 +1,6 @@
 package com.translucent.firegamesback.model;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.*;
 
 import javax.persistence.Entity;
@@ -27,4 +28,5 @@ public class Game {
     private int year;
     @NotNull
     private Console console;
+
 }
