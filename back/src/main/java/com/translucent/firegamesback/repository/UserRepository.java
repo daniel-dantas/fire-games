@@ -3,5 +3,8 @@ package com.translucent.firegamesback.repository;
 import com.translucent.firegamesback.model.User;
 import org.springframework.data.jpa.repository.JpaRepository;
 
-public interface UserRepository extends JpaRepository<User, Long> {
+import java.util.Optional;
+
+public interface UserRepository extends JpaRepository<User, String> {
+    Optional<User> getByEmail(String email);
 }

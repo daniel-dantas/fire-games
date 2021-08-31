@@ -1,5 +1,6 @@
 package com.translucent.firegamesback.model;
 
+import com.fasterxml.jackson.annotation.JsonAnySetter;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.sun.istack.NotNull;
 import lombok.*;
@@ -14,18 +15,15 @@ import java.util.List;
 @AllArgsConstructor
 @NoArgsConstructor
 public class User {
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long id;
 
     @NotNull
     private String username;
 
+    @Id
     @NotNull
     private String email;
 
     @NotNull
-    @JsonIgnore
     private String password;
 
     @OneToMany(targetEntity = MyGameAnnotation.class)
