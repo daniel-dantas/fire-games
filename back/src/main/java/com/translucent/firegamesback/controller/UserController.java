@@ -1,5 +1,7 @@
 package com.translucent.firegamesback.controller;
 
+import com.translucent.firegamesback.dto.RegisterResponseDTO;
+import com.translucent.firegamesback.exceptions.DuplicateException;
 import com.translucent.firegamesback.model.User;
 import com.translucent.firegamesback.repository.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -7,6 +9,8 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.web.bind.annotation.*;
+
+import java.util.ArrayList;
 
 @RestController
 @RequestMapping("/user")
@@ -16,10 +20,14 @@ public class UserController {
     private UserRepository userRepository;
 
     @PostMapping("/register")
-    public ResponseEntity<User> register(@RequestBody User user) {
+    public ResponseEntity<RegisterResponseDTO> register(@RequestBody User user) {
+
+        if(this.userRepository.getByEmail(user.getEmail()).isPresent()) throw new DuplicateException("This email already belongs to a user");
+
         user.setPassword(new BCryptPasswordEncoder().encode(user.getPassword()));
-        System.out.println(user);
-        return new ResponseEntity<User>(this.userRepository.save(user), HttpStatus.CREATED);
+        user.setMy_games(new ArrayList());
+        User userSaved = this.userRepository.save(user);
+        return new ResponseEntity<>(new RegisterResponseDTO(userSaved.getId(), userSaved.getEmail()), HttpStatus.CREATED);
     }
 
 }

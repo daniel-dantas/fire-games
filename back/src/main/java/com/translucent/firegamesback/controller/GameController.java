@@ -3,11 +3,15 @@ package com.translucent.firegamesback.controller;
 import com.translucent.firegamesback.exceptions.NotFoundException;
 import com.translucent.firegamesback.model.Game;
 import com.translucent.firegamesback.model.MyGameAnnotation;
+import com.translucent.firegamesback.model.User;
 import com.translucent.firegamesback.repository.GameRepository;
 import com.translucent.firegamesback.repository.MyGameAnnotationRepository;
+import com.translucent.firegamesback.repository.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -21,6 +25,9 @@ public class GameController {
 
     @Autowired
     private MyGameAnnotationRepository myGameRepository;
+
+    @Autowired
+    private UserRepository userRepository;
 
     @PostMapping
     public ResponseEntity<Game> store (@RequestBody Game game) {
@@ -60,28 +67,39 @@ public class GameController {
         }).orElse(ResponseEntity.notFound().build());
     }
 
-    @PostMapping("/{id}/add")
-    public ResponseEntity<MyGameAnnotation> addLibrary (@PathVariable("id") Long id, @RequestBody MyGameAnnotation myLibrary) {
+    @PostMapping("/myLibrary/{id}/add")
+    public ResponseEntity<MyGameAnnotation> addLibrary (@PathVariable("id") Long id, @RequestBody MyGameAnnotation myGame) {
 
         if (!this.gameRepository.existsById(id)) throw new NotFoundException("There is no game with this id");
 
-        Game game = this.gameRepository.findById(id).get();
+        UserDetails userDetail = (UserDetails) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
 
-        myLibrary.setGame(game);
+        User user = this.userRepository.getByEmail(userDetail.getUsername()).get();
 
-        return new ResponseEntity<MyGameAnnotation>(this.myGameRepository.save(myLibrary), HttpStatus.CREATED);
+        myGame.setGame(this.gameRepository.findById(id).get());
+
+        MyGameAnnotation gameSaved = this.myGameRepository.save(myGame);
+
+        user.getMy_games().add(gameSaved);
+
+        this.userRepository.save(user);
+        return new ResponseEntity<MyGameAnnotation>(gameSaved, HttpStatus.CREATED);
 
     }
 
     @GetMapping("/myLibrary")
     public ResponseEntity<List<MyGameAnnotation>> myLibrary (){
-        return new ResponseEntity<>(this.myGameRepository.findAll(), HttpStatus.OK);
+
+        UserDetails userDetail = (UserDetails) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+
+        User user = this.userRepository.getByEmail(userDetail.getUsername()).get();
+
+        return new ResponseEntity<List<MyGameAnnotation>>(user.getMy_games(), HttpStatus.OK);
     }
 
     @GetMapping("/myLibrary/{id}")
     public ResponseEntity<MyGameAnnotation> getMyAnnotation(@PathVariable("id") Long id) {
         if (!this.myGameRepository.existsById(id)) throw new NotFoundException("There is no game with this id");
-
         return new ResponseEntity<MyGameAnnotation>(this.myGameRepository.findById(id).get(), HttpStatus.OK);
     }
 

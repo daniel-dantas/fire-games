@@ -21,8 +21,7 @@ public class User {
     private Long id;
 
     @NotNull
-    private String username;
-    @NotNull
+    @Column(unique = true, nullable = false)
     private String email;
 
     @NotNull
