@@ -1,8 +1,11 @@
 package com.translucent.firegamesback.validations;
 
+import com.translucent.firegamesback.exceptions.MaximumYearExceededException;
 import com.translucent.firegamesback.exceptions.MinimumYearExceededException;
 import com.translucent.firegamesback.exceptions.ParameterExceededException;
 import com.translucent.firegamesback.model.Game;
+
+import java.time.LocalDate;
 
 public abstract class GameValidation {
 
@@ -13,6 +16,8 @@ public abstract class GameValidation {
             throw new ParameterExceededException();
         } else if (game.getYear() < GameValidation.MINIMUM_YEAR) {
             throw new MinimumYearExceededException();
+        } else if (game.getYear() > LocalDate.now().getYear()){
+            throw new MaximumYearExceededException();
         }
     }
 

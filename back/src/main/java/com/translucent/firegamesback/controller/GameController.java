@@ -1,5 +1,7 @@
 package com.translucent.firegamesback.controller;
 
+import com.translucent.firegamesback.dto.GameResponseDTO;
+import com.translucent.firegamesback.dto.MyGameAnnotationResponseDTO;
 import com.translucent.firegamesback.exceptions.NotFoundException;
 import com.translucent.firegamesback.model.Game;
 import com.translucent.firegamesback.model.MyGameAnnotation;
@@ -16,6 +18,7 @@ import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.ArrayList;
 import java.util.List;
 
 @RestController
@@ -32,22 +35,31 @@ public class GameController {
     private UserRepository userRepository;
 
     @PostMapping
-    public ResponseEntity<Game> store (@RequestBody Game game) {
+    public ResponseEntity<GameResponseDTO> store (@RequestBody Game game) {
         GameValidation.validate(game);
-        return new ResponseEntity<Game>(this.gameRepository.save(game), HttpStatus.CREATED);
+        return new ResponseEntity<GameResponseDTO>(GameResponseDTO.parseGame(this.gameRepository.save(game)), HttpStatus.CREATED);
     }
 
     @GetMapping
-    public ResponseEntity<List<Game>> index () {
-        return new ResponseEntity<List<Game>>(this.gameRepository.findAll(), HttpStatus.OK);
+    public ResponseEntity<List<GameResponseDTO>> index () {
+
+        List<GameResponseDTO> gamesResponse = new ArrayList<>();
+
+        List<Game> games = this.gameRepository.findAll();
+
+        for(Game game : games) {
+            gamesResponse.add(GameResponseDTO.parseGame(game));
+        }
+
+        return new ResponseEntity<List<GameResponseDTO>>(gamesResponse, HttpStatus.OK);
     }
 
     @GetMapping("/{id}")
-    public ResponseEntity<Game> show (@PathVariable("id") Long id) {
+    public ResponseEntity<GameResponseDTO> show (@PathVariable("id") Long id) {
         if (!this.gameRepository.existsById(id)) throw new NotFoundException("There is no game with this id");
         Game game = this.gameRepository.findById(id).get();
 
-        return new ResponseEntity<Game>(game, HttpStatus.OK);
+        return new ResponseEntity<GameResponseDTO>(GameResponseDTO.parseGame(game), HttpStatus.OK);
     }
 
     @DeleteMapping("/{id}")
@@ -71,7 +83,7 @@ public class GameController {
     }
 
     @PostMapping("/myLibrary/{id}/add")
-    public ResponseEntity<MyGameAnnotation> addLibrary (@PathVariable("id") Long id, @RequestBody MyGameAnnotation myGame) {
+    public ResponseEntity<MyGameAnnotationResponseDTO> addLibrary (@PathVariable("id") Long id, @RequestBody MyGameAnnotation myGame) {
 
         if (!this.gameRepository.existsById(id)) throw new NotFoundException("There is no game with this id");
 
@@ -88,28 +100,34 @@ public class GameController {
         user.getMyGames().add(gameSaved);
 
         this.userRepository.save(user);
-        return new ResponseEntity<MyGameAnnotation>(gameSaved, HttpStatus.CREATED);
+        return new ResponseEntity<MyGameAnnotationResponseDTO>(MyGameAnnotationResponseDTO.parseGameAnnotation(gameSaved), HttpStatus.CREATED);
 
     }
 
     @GetMapping("/myLibrary")
-    public ResponseEntity<List<MyGameAnnotation>> myLibrary (){
+    public ResponseEntity<List<MyGameAnnotationResponseDTO>> myLibrary (){
 
         UserDetails userDetail = (UserDetails) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
 
         User user = this.userRepository.getByEmail(userDetail.getUsername()).get();
 
-        return new ResponseEntity<List<MyGameAnnotation>>(user.getMyGames(), HttpStatus.OK);
+        List<MyGameAnnotationResponseDTO> myGamesResponse = new ArrayList<>();
+
+        for(MyGameAnnotation game : user.getMyGames()) {
+            myGamesResponse.add(MyGameAnnotationResponseDTO.parseGameAnnotation(game));
+        }
+
+        return new ResponseEntity<List<MyGameAnnotationResponseDTO>>(myGamesResponse, HttpStatus.OK);
     }
 
     @GetMapping("/myLibrary/{id}")
-    public ResponseEntity<MyGameAnnotation> getMyAnnotation(@PathVariable("id") Long id) {
+    public ResponseEntity<MyGameAnnotationResponseDTO> getMyAnnotation(@PathVariable("id") Long id) {
         if (!this.myGameRepository.existsById(id)) throw new NotFoundException("There is no game with this id");
-        return new ResponseEntity<MyGameAnnotation>(this.myGameRepository.findById(id).get(), HttpStatus.OK);
+        return new ResponseEntity<MyGameAnnotationResponseDTO>(MyGameAnnotationResponseDTO.parseGameAnnotation(this.myGameRepository.findById(id).get()), HttpStatus.OK);
     }
 
     @PutMapping("/myLibrary/{id}")
-    public ResponseEntity<MyGameAnnotation> editMyAnnotation (@PathVariable("id") Long id, @RequestBody MyGameAnnotation gameAnnotation) {
+    public ResponseEntity<MyGameAnnotationResponseDTO> editMyAnnotation (@PathVariable("id") Long id, @RequestBody MyGameAnnotation gameAnnotation) {
         if (!this.myGameRepository.existsById(id)) throw new NotFoundException("There is no game with this id");
 
         return this.myGameRepository.findById(id).map(item -> {
@@ -117,7 +135,7 @@ public class GameController {
             item = gameAnnotation;
             item.setId(id);
             item.setGame(game);
-            return new ResponseEntity<MyGameAnnotation>(this.myGameRepository.save(item), HttpStatus.OK);
+            return new ResponseEntity<MyGameAnnotationResponseDTO>(MyGameAnnotationResponseDTO.parseGameAnnotation(this.myGameRepository.save(item)), HttpStatus.OK);
         }).orElse(ResponseEntity.notFound().build());
     }
 
