@@ -7,6 +7,8 @@ import com.translucent.firegamesback.model.User;
 import com.translucent.firegamesback.repository.GameRepository;
 import com.translucent.firegamesback.repository.MyGameAnnotationRepository;
 import com.translucent.firegamesback.repository.UserRepository;
+import com.translucent.firegamesback.validations.GameValidation;
+import com.translucent.firegamesback.validations.MyGameAnnotationValidation;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -31,6 +33,7 @@ public class GameController {
 
     @PostMapping
     public ResponseEntity<Game> store (@RequestBody Game game) {
+        GameValidation.validate(game);
         return new ResponseEntity<Game>(this.gameRepository.save(game), HttpStatus.CREATED);
     }
 
@@ -72,6 +75,8 @@ public class GameController {
 
         if (!this.gameRepository.existsById(id)) throw new NotFoundException("There is no game with this id");
 
+        MyGameAnnotationValidation.validate(myGame);
+
         UserDetails userDetail = (UserDetails) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
 
         User user = this.userRepository.getByEmail(userDetail.getUsername()).get();
@@ -80,7 +85,7 @@ public class GameController {
 
         MyGameAnnotation gameSaved = this.myGameRepository.save(myGame);
 
-        user.getMy_games().add(gameSaved);
+        user.getMyGames().add(gameSaved);
 
         this.userRepository.save(user);
         return new ResponseEntity<MyGameAnnotation>(gameSaved, HttpStatus.CREATED);
@@ -94,7 +99,7 @@ public class GameController {
 
         User user = this.userRepository.getByEmail(userDetail.getUsername()).get();
 
-        return new ResponseEntity<List<MyGameAnnotation>>(user.getMy_games(), HttpStatus.OK);
+        return new ResponseEntity<List<MyGameAnnotation>>(user.getMyGames(), HttpStatus.OK);
     }
 
     @GetMapping("/myLibrary/{id}")

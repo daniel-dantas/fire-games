@@ -22,9 +22,9 @@ public class MyGameAnnotation implements Serializable {
     @NotNull
     private Boolean concluded;
     @NotNull
-    private LocalDate conclusion_date;
+    private LocalDate conclusionDate;
     @NotNull
-    private String personal_notes;
+    private String personalNotes;
 
     @NotNull
     @ManyToOne

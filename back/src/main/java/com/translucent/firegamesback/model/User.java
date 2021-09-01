@@ -1,7 +1,5 @@
 package com.translucent.firegamesback.model;
 
-import com.fasterxml.jackson.annotation.JsonAnySetter;
-import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.sun.istack.NotNull;
 import lombok.*;
 
@@ -27,8 +25,11 @@ public class User implements Serializable {
     private String email;
 
     @NotNull
+    @Column(nullable = false)
     private String password;
 
+    // Realizing relationship with MyGameAnnotation and ordering by conclusionDate
     @OneToMany(targetEntity = MyGameAnnotation.class)
-    private List my_games;
+    @OrderBy("conclusionDate DESC")
+    private List<MyGameAnnotation> myGames;
 }

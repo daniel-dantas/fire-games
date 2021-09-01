@@ -25,7 +25,7 @@ public class UserController {
         if(this.userRepository.getByEmail(user.getEmail()).isPresent()) throw new DuplicateException("This email already belongs to a user");
 
         user.setPassword(new BCryptPasswordEncoder().encode(user.getPassword()));
-        user.setMy_games(new ArrayList());
+        user.setMyGames(new ArrayList());
         User userSaved = this.userRepository.save(user);
         return new ResponseEntity<>(new RegisterResponseDTO(userSaved.getId(), userSaved.getEmail()), HttpStatus.CREATED);
     }
