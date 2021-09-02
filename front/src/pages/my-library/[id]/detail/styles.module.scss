@@ -11,12 +11,23 @@
     justify-content: center;
     align-items: center;
 
-    form {
+    .detailContainer {
         // background-color: red;
         width: 60vw;
 
+        @media (max-width: 1400px) {
+            width: 70vw;
+        }
+
         .formContent {
             display: flex;
+        }
+
+        .sectionBadges {
+            margin: 5px 0;
+            * {
+                margin-right: 10px;
+            }
         }
 
         .operationsForm {
@@ -26,12 +37,28 @@
             justify-content: center;
             align-items: center;
 
-            button:first-child {
-                margin-right: 20%;
-            }
-
             @media (max-width: 1400px) {
                 padding: 20px 0;
+            }
+
+            button {
+                margin: 0 15%;
+                padding: 10px 80px;
+                cursor: pointer;
+                font-weight: bold;
+                border-radius: 5px;
+            }
+
+            button:first-child {
+                border: 2px solid var(--secondary);
+                background-color: transparent;
+                color: var(--secondary);
+                
+            }
+            button:last-child {
+                background-color: var(--secondary);
+                border: 2px solid var(--secondary);
+                color: #fff;
             }
         }
 
@@ -45,24 +72,11 @@
             display: flex;
             justify-content: center;
             align-items: center;
-            .frontCover {
-                cursor: pointer;
+            
+            img {
+                border-radius: 5px;
             }
-            label {
-                height: 95%;
-                .imageButton {
-                    background-color:#C4C4C4;
-                    display: flex;
-                    flex-direction:column-reverse;
-                    justify-content: center;
-                    align-items: center;
-                    border-radius: 5px;
-                    width: 100%;
-                    height: 100%;
-                }
-                cursor: pointer;
-                width: 80%;
-            }
+
             input {
                 display: none;
             }
@@ -72,13 +86,39 @@
             width: 60%;
             // background-color: red;
             // align-items: center;
+            .titleContainer {
+                position: relative;
+                display: flex;
+                .operationsGame {
+                    // background-color: blue;
+                    height: 100%;
+                    display: flex;
+                    justify-content: center;
+                    align-items: center;
+                    position: absolute;
+                    right: 10px;
 
-            .inputGroupOne{
-                input {
-                    width: 100%;
+                    button:first-child {
+                        margin-right: 10px;
+                    }
+
+                    button {
+                        display: flex;
+                        justify-content: center;
+                        align-items: center;
+                        padding: 10px 10px;
+                        border-radius: 20px;
+                    }
+
                 }
 
-                margin: 5px 0;
+            }
+
+            .inputGroupOne{
+                
+                
+
+                margin: 2px 0;
 
             }
             .inputGroupTwo{
@@ -108,7 +148,8 @@
                 }
             }
 
-            .inputCkEditor{
+            .sectionPersonalNotes{
+                height: 300px;
                 .personalLabel {
                     // background-color: blue;
                     color: #0000009a;

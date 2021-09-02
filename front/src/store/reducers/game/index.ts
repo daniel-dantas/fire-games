@@ -20,6 +20,7 @@ const initialState = {
 	} as IGame,
 	myGames: [
 		{
+			id: 1,
 			concluded: true,
 			personalNotes: "MUITO BOM",
 			conclusionDate: new Date(),
@@ -28,11 +29,13 @@ const initialState = {
 				title: "Watch dogs",
 				console: EConsole.XBOX_ONE,
 				year: "2016",
-				front_cover: "/images/wd-xbox360.jpg"
+				front_cover: "/images/wd-xbox360.jpg",
+				age: 18
 			}
 		}
 	] as IMyGame[],
 	myGame: {
+		id: 1,
 		concluded: true,
 		personalNotes: "MUITO BOM",
 		conclusionDate: new Date(),
@@ -41,7 +44,8 @@ const initialState = {
 			title: "Watch dogs",
 			console: EConsole.XBOX_ONE,
 			year: "2016",
-			front_cover: "/images/wd-xbox360.jpg"
+			front_cover: "/images/wd-xbox360.jpg",
+			age: 18
 		}
 	} as IMyGame
 };

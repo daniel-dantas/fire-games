@@ -1,24 +1,22 @@
 export enum EConsole {
-	XBOX_ONE = "XBOX ONE",
+	XBOX_ONE = "XBOX_ONE",
 	PS4 = "PS4",
-	NINTENDO_SWITCH = "NINTENDO SWITCH",
+	NINTENDO_SWITCH = "NINTENDO_SWITCH",
 	PS5 = "PS5",
 	PC = "PC"
 }
 
 export interface IGame {
-	id: number;
+	id?: number;
 	front_cover: string;
 	title: string;
-	year: string;
+	year?: string;
 	console: EConsole;
-	concluded: boolean;
-	conclusion_date: Date;
-	personal_notes: string;
-	age: number;
+	age?: number;
 }
 
 export interface IMyGame {
+	id?: number;
 	concluded: boolean;
 	conclusionDate: Date;
 	personalNotes: string;

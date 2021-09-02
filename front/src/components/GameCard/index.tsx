@@ -5,6 +5,7 @@ import styles from "./styles.module.scss";
 import { IMyGame, IGame } from "../../interfaces/IGame";
 import { useRouter } from "next/router";
 import { route } from "next/dist/server/router";
+import Badge from "../Badge";
 
 interface Props {
 	game?: IGame;
@@ -16,17 +17,18 @@ const GameCard: React.FC<Props> = ({ game, type, my_game }) => {
 	const router = useRouter();
 
 	const handleClick = useCallback(() => {
-		router.push({
-			pathname: `/library/add`,
-			query:
-				type === "GAME_LIBRARY"
-					? {
+		router.push(
+			type === "GAME_LIBRARY"
+				? {
+						pathname: `/library/add`,
+						query: {
 							game: game?.id
-					  }
-					: {
-							my_game: my_game?.game?.id
-					  }
-		});
+						}
+				  }
+				: {
+						pathname: `/my-library/${my_game?.id}/detail`
+				  }
+		);
 	}, [game]);
 
 	return (
@@ -42,9 +44,7 @@ const GameCard: React.FC<Props> = ({ game, type, my_game }) => {
 				<span>Year: {game ? game?.year : my_game?.game?.year}</span>
 				<br />
 				<div className={styles.badge_content}>
-					<span className={styles.badge}>
-						{game ? game?.console : my_game?.game?.console}
-					</span>
+					<Badge>{game ? game?.console : my_game?.game?.console}</Badge>
 				</div>
 			</div>
 		</div>

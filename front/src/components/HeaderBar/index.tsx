@@ -10,7 +10,7 @@ const HeaderBar: React.FC = () => {
 				<Image src="/images/logo_2.svg" alt="teste" width={250} height={70} />
 			</div>
 			<div className={styles.content_search}>
-				<input placeholder="Find Game" type="text" />
+				<input placeholder="Find Game" />
 			</div>
 			<div className={styles.content_links}>
 				<Link href="/library">Library</Link>
