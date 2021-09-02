@@ -1,6 +1,5 @@
 import { combineReducers } from "redux";
 import game from "./game";
-
 const reducers = {
 	game
 };

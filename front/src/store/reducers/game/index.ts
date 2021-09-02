@@ -1,5 +1,5 @@
 import { HYDRATE } from "next-redux-wrapper";
-import IGame, { EConsole } from "../../../interfaces/IGame";
+import { EConsole, IGame, IMyGame } from "../../../interfaces/IGame";
 
 const initialState = {
 	games: [
@@ -10,7 +10,40 @@ const initialState = {
 			year: "2016",
 			front_cover: "/images/wd-xbox360.jpg"
 		}
-	] as IGame[]
+	] as IGame[],
+	game: {
+		id: 1,
+		title: "Watch dogs",
+		console: EConsole.XBOX_ONE,
+		year: "2016",
+		front_cover: "/images/wd-xbox360.jpg"
+	} as IGame,
+	myGames: [
+		{
+			concluded: true,
+			personalNotes: "MUITO BOM",
+			conclusionDate: new Date(),
+			game: {
+				id: 1,
+				title: "Watch dogs",
+				console: EConsole.XBOX_ONE,
+				year: "2016",
+				front_cover: "/images/wd-xbox360.jpg"
+			}
+		}
+	] as IMyGame[],
+	myGame: {
+		concluded: true,
+		personalNotes: "MUITO BOM",
+		conclusionDate: new Date(),
+		game: {
+			id: 1,
+			title: "Watch dogs",
+			console: EConsole.XBOX_ONE,
+			year: "2016",
+			front_cover: "/images/wd-xbox360.jpg"
+		}
+	} as IMyGame
 };
 
 const reducer = function (state = initialState, { type, payload }: any) {

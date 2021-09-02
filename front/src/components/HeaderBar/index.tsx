@@ -14,7 +14,7 @@ const HeaderBar: React.FC = () => {
 			</div>
 			<div className={styles.content_links}>
 				<Link href="/library">Library</Link>
-				<Link href="/library/new">New Game</Link>
+				<Link href="/library/add">New Game</Link>
 				<Link href="/my-library">My Library</Link>
 				<button>Logout</button>
 			</div>

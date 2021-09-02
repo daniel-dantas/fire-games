@@ -6,7 +6,7 @@ export enum EConsole {
 	PC = "PC"
 }
 
-export default interface IGame {
+export interface IGame {
 	id: number;
 	front_cover: string;
 	title: string;
@@ -15,4 +15,12 @@ export default interface IGame {
 	concluded: boolean;
 	conclusion_date: Date;
 	personal_notes: string;
+	age: number;
+}
+
+export interface IMyGame {
+	concluded: boolean;
+	conclusionDate: Date;
+	personalNotes: string;
+	game: IGame;
 }
