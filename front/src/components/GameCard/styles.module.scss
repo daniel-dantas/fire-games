@@ -5,7 +5,7 @@
     position: relative;
 
     &:hover {
-        border: 1px solid #3DADFF;
+        border: 1px solid var(--secondary);
     }
 
     margin: 20px 0;
@@ -32,14 +32,6 @@
             margin-left: -10px;
             position: absolute;
             bottom: 40px;
-
-            .badge {
-                color: #fff;
-                background-color: #3DADFF;
-                font-weight: bold;
-                padding: 5px 10px;
-                border-radius: 5px;
-            }
         }
 
         

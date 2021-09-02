@@ -1,0 +1,125 @@
+.container{
+    // background-color: blue;
+
+    height: 90vh;
+
+    // background-color: blue;
+    padding: 20px 0;
+
+
+    display: flex;
+    justify-content: center;
+    align-items: center;
+
+    form {
+        // background-color: red;
+        width: 60vw;
+
+        .formContent {
+            display: flex;
+        }
+
+        .operationsForm {
+            // background-color:red;
+            padding: 50px 0;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+
+            button:first-child {
+                margin-right: 20%;
+            }
+
+            @media (max-width: 1400px) {
+                padding: 20px 0;
+            }
+        }
+
+        input, select {
+            height: 40px;
+        }
+
+        .containerUpload {
+            width: 40%;
+            // background-color: blue;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            .frontCover {
+                cursor: pointer;
+            }
+            label {
+                height: 95%;
+                .imageButton {
+                    background-color:#C4C4C4;
+                    display: flex;
+                    flex-direction:column-reverse;
+                    justify-content: center;
+                    align-items: center;
+                    border-radius: 5px;
+                    width: 100%;
+                    height: 100%;
+                }
+                cursor: pointer;
+                width: 80%;
+            }
+            input {
+                display: none;
+            }
+        }
+
+        .containerInputs {
+            width: 60%;
+            // background-color: red;
+            // align-items: center;
+
+            .inputGroupOne{
+                input {
+                    width: 100%;
+                }
+
+                margin: 5px 0;
+
+            }
+            .inputGroupTwo{
+
+                margin: 5px 0;
+                
+                display: flex;
+
+                input[type="text"], input[type="date"],select {
+                    width: 50%;
+                }
+
+                input:first-child {
+                    padding-right: 20px;
+                }
+
+                .concluded {
+                    // background-color: red;
+                    display: flex;
+                    padding: 0 20px;
+                    width: 50%;
+                    // justify-content: center;
+                    align-items: center;
+                    input {
+                        margin-right: 10px;
+                    }
+                }
+            }
+
+            .inputCkEditor{
+                .personalLabel {
+                    // background-color: blue;
+                    color: #0000009a;
+                    font-size: 1em;
+                }
+            }
+            
+        }
+        
+    }
+
+    
+
+}
