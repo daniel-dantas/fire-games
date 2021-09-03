@@ -5,7 +5,7 @@ import styles from "./styles.module.scss";
 interface Props
 	extends Omit<
 		React.DetailedHTMLProps<
-			React.InputHTMLAttributes<HTMLButtonElement>,
+			React.ButtonHTMLAttributes<HTMLButtonElement>,
 			HTMLButtonElement
 		>,
 		"onChange"

@@ -16,8 +16,10 @@
         top: 0px;
 
         background: rgba(0, 14, 68, 0.75);
+
         color: rgba(255, 255, 255, 0.74);
 
+        
         .containerAnimetedText{
             width: 55vw;
             height: 100vh;
@@ -26,9 +28,7 @@
                 width: 70%;
                 text-align: center;
                 font-size: 2em;
-
                 font-weight: 500;
-
             }
 
             display: flex;
@@ -36,6 +36,7 @@
             align-items: center;
 
         }
+
     }
 
     .containerBlueRotate{
@@ -59,7 +60,7 @@
 
         background: #FFFFFF;
         // transform: rotate(20deg);
-        
+
         form {
             width: 80%;
             height: 100%;
@@ -69,13 +70,12 @@
             
             justify-content: center;
             align-items: center;
-            
 
             h3 {
                 color: var(--primary);
                 font-size: 1.5em;
             }
-
+            
             input, button {
                 margin: 10px 0;
             }
@@ -93,8 +93,10 @@
                 height: 0.2px;
             }
 
-            button:first-child {
-                margin: 50px 0;
+            button[type="submit"]{
+                // margin: 50px 0;
+                background-color: #42B72A;
+                border: none;
             }
 
             button {
@@ -102,10 +104,6 @@
                 height: 50px;
             }
 
-            button:last-child {
-                background-color: #42B72A;
-                border: none;
-            }
 
             @media (max-width: 1400px) {
                 input, button, hr{

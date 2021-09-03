@@ -134,7 +134,7 @@ const AddGame: NextPage<Props> = ({ game_id, my_game_id }) => {
 							<div className={styles.inputCkEditor}>
 								<h3 className={styles.personalLabel}>Personal Notes</h3>
 								<CKEditor
-									data={myForm.values.personalNotes}
+									initData={myForm.values.personalNotes}
 									onChange={editor =>
 										myForm.setFieldValue(
 											"personalNotes",
