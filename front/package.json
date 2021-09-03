@@ -29,7 +29,8 @@
     "redux-thunk": "^2.3.0",
     "sass": "^1.38.1",
     "sweetalert2": "^11.1.4",
-    "yarn": "^1.22.11"
+    "yarn": "^1.22.11",
+    "yup": "^0.32.9"
   },
   "devDependencies": {
     "@types/moment": "^2.13.0",
