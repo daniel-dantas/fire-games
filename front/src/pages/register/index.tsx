@@ -3,20 +3,21 @@ import { useFormik } from "formik";
 import { NextPage } from "next";
 import { useRouter } from "next/router";
 import React, { useCallback, useState } from "react";
-import Button from "../components/Button";
+import Button from "../../components/Button";
 
 import styles from "./styles.module.scss";
 
 const Home: NextPage = () => {
 	const router = useRouter();
 
-	const loginForm = useFormik({
+	const registerForm = useFormik({
 		initialValues: {
 			email: "",
-			password: ""
+			password: "",
+			confirmPassword: ""
 		},
 		onSubmit: values => {
-			router.push("/library");
+			router.push("/");
 		}
 	});
 
@@ -34,32 +35,37 @@ const Home: NextPage = () => {
 			</div>
 			<div className={styles.containerBlueRotate} />
 			<div className={styles.containerWhiteRotate}>
-				<form onSubmit={loginForm.handleSubmit}>
-					<h3>Login</h3>
+				<form onSubmit={registerForm.handleSubmit}>
+					<h3>Register</h3>
 
 					<input
 						type="email"
 						placeholder="Email"
-						{...loginForm.getFieldProps("email")}
+						{...registerForm.getFieldProps("email")}
 					/>
+
 					<input
 						type="password"
 						placeholder="Password"
-						{...loginForm.getFieldProps("password")}
+						{...registerForm.getFieldProps("password")}
+					/>
+
+					<input
+						type="password"
+						placeholder="Confirm to password"
+						{...registerForm.getFieldProps("confirmPassword")}
 					/>
 
 					<Button styleType="Primary" type="submit">
-						Login
+						Register
 					</Button>
-
 					<hr />
-
 					<Button
 						styleType="Primary"
 						type="button"
-						onClick={e => router.push("register")}
+						onClick={e => router.push("/")}
 					>
-						Register
+						Back to Login
 					</Button>
 				</form>
 			</div>
