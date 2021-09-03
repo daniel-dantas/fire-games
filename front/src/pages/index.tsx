@@ -3,12 +3,18 @@ import { useFormik } from "formik";
 import { NextPage } from "next";
 import { useRouter } from "next/router";
 import React, { useCallback, useState } from "react";
+import { useDispatch } from "react-redux";
+import { toast } from "react-toastify";
 import Button from "../components/Button";
+import IError from "../interfaces/IError";
+import { submitLogin } from "../store/actions/account";
 
 import styles from "./styles.module.scss";
 
 const Home: NextPage = () => {
 	const router = useRouter();
+
+	const dispatch = useDispatch();
 
 	const loginForm = useFormik({
 		initialValues: {
@@ -16,11 +22,17 @@ const Home: NextPage = () => {
 			password: ""
 		},
 		onSubmit: values => {
-			router.push("/library");
+			dispatch(
+				submitLogin(values, async (err: IError) => {
+					if (err && err.unauthorized) {
+						await toast.error(err.unauthorized);
+					}
+
+					if (!err) router.push("/library");
+				})
+			);
 		}
 	});
-
-	const handleLogin = useCallback(() => {}, []);
 
 	return (
 		<div className={styles.root}>
@@ -40,11 +52,13 @@ const Home: NextPage = () => {
 					<input
 						type="email"
 						placeholder="Email"
+						required
 						{...loginForm.getFieldProps("email")}
 					/>
 					<input
 						type="password"
 						placeholder="Password"
+						required
 						{...loginForm.getFieldProps("password")}
 					/>
 
