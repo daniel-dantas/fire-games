@@ -28,6 +28,22 @@ const reducer = (state = initialState, { type, payload }: any) => {
 				token: payload.token
 			};
 		}
+		case Actions.SUBMIT_REGISTER: {
+			return {
+				loading: true
+			};
+		}
+		case Actions.SUBMIT_REGISTER_FAILED: {
+			return {
+				loading: false
+			};
+		}
+		case Actions.SUBMIT_REGISTER_SUCCESS: {
+			return {
+				loading: false,
+				...payload
+			};
+		}
 		default: {
 			return state;
 		}

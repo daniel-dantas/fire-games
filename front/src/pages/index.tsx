@@ -8,11 +8,14 @@ import { toast } from "react-toastify";
 import Button from "../components/Button";
 import IError from "../interfaces/IError";
 import { submitLogin } from "../store/actions/account";
+import * as yup from "yup";
 
 import styles from "./styles.module.scss";
 
 const Home: NextPage = () => {
 	const router = useRouter();
+
+	const [failed, setFailed] = useState();
 
 	const dispatch = useDispatch();
 
@@ -21,14 +24,21 @@ const Home: NextPage = () => {
 			email: "",
 			password: ""
 		},
+		validationSchema: yup.object().shape({
+			email: yup.string().required("You need to fill in the email"),
+			password: yup
+				.string()
+				.required("You need to fill in the passwords")
+				.min(6, "Password must be longer than 6 characters")
+		}),
 		onSubmit: values => {
 			dispatch(
 				submitLogin(values, async (err: IError) => {
 					if (err && err.unauthorized) {
 						await toast.error(err.unauthorized);
+					} else {
+						router.push("/library");
 					}
-
-					if (!err) router.push("/library");
 				})
 			);
 		}
@@ -55,12 +65,22 @@ const Home: NextPage = () => {
 						required
 						{...loginForm.getFieldProps("email")}
 					/>
+					{loginForm.touched.email && loginForm.errors.email && (
+						<div className={styles.errorForm}>
+							<span>* {loginForm.errors.email}</span>
+						</div>
+					)}
 					<input
 						type="password"
 						placeholder="Password"
 						required
 						{...loginForm.getFieldProps("password")}
 					/>
+					{loginForm.touched.password && loginForm.errors.password && (
+						<div className={styles.errorForm}>
+							<span>* {loginForm.errors.password}</span>
+						</div>
+					)}
 
 					<Button styleType="Primary" type="submit">
 						Login

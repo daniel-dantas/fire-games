@@ -75,7 +75,20 @@
                 color: var(--primary);
                 font-size: 1.5em;
             }
+
+            .errorForm{
+                margin-top: -10px;
+                // background-color: blue;
+                width: 70%;
+                padding: 0 10px;
+                span {
+                    font-size: 0.8em;
+                    color: #d50000;
+                }
+            }
             
+            
+
             input, button {
                 margin: 10px 0;
             }
