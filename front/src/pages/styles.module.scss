@@ -73,11 +73,14 @@
             .errorForm{
                 margin-top: -10px;
                 // background-color: blue;
-                width: 70%;
+                width: 60%;
                 padding: 0 10px;
                 span {
                     font-size: 0.8em;
                     color: #d50000;
+                }
+                @media (max-width: 1400px) {
+                    width: 70%;
                 }
             }
             

@@ -44,6 +44,8 @@ const GameCard: React.FC<Props> = ({ game, type, my_game }) => {
 				<div className={styles.badge_content}>
 					<Badge>{game ? game?.console : my_game?.game?.console}</Badge>
 					<Badge>{game ? game?.age : my_game?.game?.age} Years</Badge>
+
+					{my_game && my_game.concluded && <Badge>Concluded</Badge>}
 				</div>
 			</div>
 		</div>

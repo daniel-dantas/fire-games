@@ -6,11 +6,15 @@ import { FaImage } from "react-icons/fa";
 import styles from "./styles.module.scss";
 import Button from "../../../components/Button";
 import { useFormik } from "formik";
-import { EConsole, IMyGame } from "../../../interfaces/IGame";
+import { EConsole, IGame, IMyGame } from "../../../interfaces/IGame";
 import { useCallback } from "react";
 import Image from "next/image";
 import { ChangeEvent } from "react";
-
+import * as yup from "yup";
+import moment from "moment";
+import { useDispatch, useSelector } from "react-redux";
+import { getGame, getMyGame } from "../../../store/actions/games";
+import IState from "../../../interfaces/IState";
 interface Props {
 	game_id?: string;
 	my_game_id?: string;
@@ -20,10 +24,17 @@ const AddGame: NextPage<Props> = ({ game_id, my_game_id }) => {
 	const [frontCoverFile, setFrontCoverFile] = useState<any>(null);
 	const [consoles, setConsoles] = useState<string[]>([]);
 
+	const dispatch = useDispatch();
+
+	const { game, myGame } = useSelector<
+		IState,
+		{ game: IGame; myGame: IMyGame }
+	>(state => state.games);
+
 	const myForm = useFormik({
 		initialValues: {
 			id: my_game_id ? Number(my_game_id) : null,
-			concluded: "",
+			concluded: true,
 			conclusionDate: "",
 			game: {
 				id: game_id ? Number(game_id) : null,
@@ -34,11 +45,40 @@ const AddGame: NextPage<Props> = ({ game_id, my_game_id }) => {
 			},
 			personalNotes: ""
 		},
+		validationSchema: yup.object().shape({
+			// "game.title": yup
+			// 	.string()
+			// 	.required("You need to fill in the title of the game")
+			// 	.max(100, "Title cannot exceed 100 characters"),
+			// "game.year": yup
+			// 	.number()
+			// 	.required("You need to fill in the game year")
+			// 	.max(new Date().getFullYear())
+			// 	.min(1970, "The game cannot be older than 1970")
+			// 	.typeError("Invalid year format")
+		}),
 		onSubmit: (values, helpers) => {
+			console.log("values");
 			console.log("VALUES");
 			console.log(values);
 		}
 	});
+
+	useEffect(() => {
+		if (game_id) {
+			dispatch(getGame(Number(game_id)));
+			myForm.setFieldValue("game", game);
+			setFrontCoverFile(game.front_cover);
+		}
+	}, [game_id]);
+
+	useEffect(() => {
+		if (my_game_id) {
+			dispatch(getMyGame(my_game_id));
+			myForm.setValues(myGame as any);
+			setFrontCoverFile(myGame.game.front_cover);
+		}
+	}, [my_game_id]);
 
 	const handleUpload = useCallback(async (e: ChangeEvent<HTMLInputElement>) => {
 		if (e.target.files) {
@@ -79,8 +119,6 @@ const AddGame: NextPage<Props> = ({ game_id, my_game_id }) => {
 									className={styles.frontCover}
 									src={frontCoverFile}
 									alt=""
-									width={300}
-									height={500}
 									onClick={e => setFrontCoverFile(null)}
 								/>
 							) : (
@@ -121,7 +159,11 @@ const AddGame: NextPage<Props> = ({ game_id, my_game_id }) => {
 									<input
 										type="checkbox"
 										id="concluded"
-										{...myForm.getFieldProps("concluded")}
+										checked={myForm.values.concluded}
+										onChange={e =>
+											myForm.setFieldValue("concluded", e.target.checked)
+										}
+										// {...myForm.getFieldProps("concluded")}
 									/>
 									<span>Concluded game?</span>
 								</label>

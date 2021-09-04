@@ -11,6 +11,7 @@ import { submitLogin } from "../store/actions/account";
 import * as yup from "yup";
 
 import styles from "./styles.module.scss";
+import { route } from "next/dist/server/router";
 
 const Home: NextPage = () => {
 	const router = useRouter();
@@ -37,6 +38,7 @@ const Home: NextPage = () => {
 					if (err && err.unauthorized) {
 						toast.error(err.unauthorized);
 					} else {
+						router.push("/library");
 					}
 				})
 			);

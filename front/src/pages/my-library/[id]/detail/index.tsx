@@ -1,9 +1,9 @@
 import { CKEditor } from "ckeditor4-react";
 import moment from "moment";
 import { NextPage } from "next";
-import React from "react";
+import React, { useEffect } from "react";
 import { FaEdit, FaImage, FaTrashAlt } from "react-icons/fa";
-import { useSelector } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import HeaderBar from "../../../../components/HeaderBar";
 import { IMyGame } from "../../../../interfaces/IGame";
 import IState from "../../../../interfaces/IState";
@@ -14,12 +14,17 @@ import Badge from "../../../../components/Badge";
 import Button from "../../../../components/Button";
 import { useRouter } from "next/router";
 import { route } from "next/dist/server/router";
+import { getMyGame } from "../../../../store/actions/games";
 
 const Detail: NextPage = () => {
 	const router = useRouter();
 
+	const dispatch = useDispatch();
+
+	const myGameId = router.query.id;
+
 	const { myGame } = useSelector<IState, { myGame: IMyGame }>(
-		state => state.game
+		state => state.games
 	);
 
 	const handleEdit = () => {
@@ -31,6 +36,14 @@ const Detail: NextPage = () => {
 		});
 	};
 
+	useEffect(() => {
+		if (myGameId) {
+			console.log("GAME ID");
+			console.log(myGameId);
+			dispatch(getMyGame(myGameId as string));
+		}
+	}, [dispatch, myGameId]);
+
 	return (
 		<div className={styles.root}>
 			<HeaderBar />
@@ -38,9 +51,9 @@ const Detail: NextPage = () => {
 				<div className={styles.detailContainer}>
 					<div className={styles.formContent}>
 						<div className={styles.containerUpload}>
-							<Image
+							<img
 								className={styles.frontCover}
-								src={myGame?.game?.front_cover + ""}
+								src={myGame?.game?.front_cover}
 								alt=""
 								width={300}
 								height={500}

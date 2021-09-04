@@ -5,43 +5,9 @@ import * as Actions from "../../actions/games";
 let initialState = {
 	loading: false,
 	games: [],
-	game: {
-		id: 1,
-		title: "Watch dogs",
-		console: EConsole.XBOX_ONE,
-		year: "2016",
-		front_cover: "/images/wd-xbox360.jpg"
-	} as IGame,
-	myGames: [
-		{
-			id: 1,
-			concluded: true,
-			personalNotes: "MUITO BOM",
-			conclusionDate: new Date(),
-			game: {
-				id: 1,
-				title: "Watch dogs",
-				console: EConsole.XBOX_ONE,
-				year: "2016",
-				front_cover: "/images/wd-xbox360.jpg",
-				age: 18
-			}
-		}
-	] as IMyGame[],
-	myGame: {
-		id: 1,
-		concluded: true,
-		personalNotes: "MUITO BOM",
-		conclusionDate: new Date(),
-		game: {
-			id: 1,
-			title: "Watch dogs",
-			console: EConsole.XBOX_ONE,
-			year: "2016",
-			front_cover: "/images/wd-xbox360.jpg",
-			age: 18
-		}
-	} as IMyGame
+	game: {},
+	myGames: [],
+	myGame: {}
 };
 
 const reducer = function (state = initialState, { type, payload }: any) {
@@ -53,6 +19,30 @@ const reducer = function (state = initialState, { type, payload }: any) {
 			return {
 				...state,
 				games: payload
+			};
+		}
+		case Actions.GET_GAME: {
+			return {
+				...state,
+				game: payload
+			};
+		}
+		case Actions.ADD_MY_GAME: {
+			return {
+				...state,
+				myGame: payload
+			};
+		}
+		case Actions.GET_MY_GAMES: {
+			return {
+				...state,
+				myGames: payload
+			};
+		}
+		case Actions.GET_MY_GAME: {
+			return {
+				...state,
+				myGame: payload
 			};
 		}
 		default:
