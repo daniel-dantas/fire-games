@@ -89,7 +89,9 @@ const Detail: NextPage = () => {
 							{myGame.personalNotes && (
 								<div className={styles.sectionPersonalNotes}>
 									<h3 className={styles.personalLabel}>Personal Notes</h3>
-									<span>{myGame.personalNotes}</span>
+									<span
+										dangerouslySetInnerHTML={{ __html: myGame.personalNotes }}
+									/>
 								</div>
 							)}
 						</div>

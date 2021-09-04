@@ -13,8 +13,16 @@ import { ChangeEvent } from "react";
 import * as yup from "yup";
 import moment from "moment";
 import { useDispatch, useSelector } from "react-redux";
-import { getGame, getMyGame } from "../../../store/actions/games";
+import {
+	addMyGame,
+	getGame,
+	getMyGame,
+	saveGame,
+	updateMyGame
+} from "../../../store/actions/games";
 import IState from "../../../interfaces/IState";
+import IError from "../../../interfaces/IError";
+import { useRouter } from "next/router";
 interface Props {
 	game_id?: string;
 	my_game_id?: string;
@@ -25,6 +33,7 @@ const AddGame: NextPage<Props> = ({ game_id, my_game_id }) => {
 	const [consoles, setConsoles] = useState<string[]>([]);
 
 	const dispatch = useDispatch();
+	const router = useRouter();
 
 	const { game, myGame } = useSelector<
 		IState,
@@ -57,28 +66,47 @@ const AddGame: NextPage<Props> = ({ game_id, my_game_id }) => {
 			// 	.min(1970, "The game cannot be older than 1970")
 			// 	.typeError("Invalid year format")
 		}),
-		onSubmit: (values, helpers) => {
-			console.log("values");
-			console.log("VALUES");
-			console.log(values);
+		onSubmit: async (values, helpers) => {
+			if (my_game_id) {
+				dispatch(
+					updateMyGame(values as any, (err: IError) => {
+						router.push("/my-library");
+					})
+				);
+			} else if (game_id) {
+			} else {
+				dispatch(
+					saveGame(values.game as any, (err: IError, gameId: number) => {
+						if (gameId) {
+							dispatch(
+								addMyGame(gameId as number, values as any, (err: IError) => {
+									router.push("/my-library");
+								})
+							);
+						}
+					})
+				);
+			}
 		}
 	});
 
 	useEffect(() => {
-		if (game_id) {
-			dispatch(getGame(Number(game_id)));
+		if (game?.id && game_id) {
 			myForm.setFieldValue("game", game);
 			setFrontCoverFile(game.front_cover);
+		} else if (myGame?.id && my_game_id) {
+			myForm.setValues(myGame as any);
+			// setFrontCoverFile(myGame.game.front_cover);
 		}
-	}, [game_id]);
+	}, [game, myGame]);
 
 	useEffect(() => {
 		if (my_game_id) {
 			dispatch(getMyGame(my_game_id));
-			myForm.setValues(myGame as any);
-			setFrontCoverFile(myGame.game.front_cover);
+		} else if (game_id) {
+			dispatch(getGame(Number(game_id)));
 		}
-	}, [my_game_id]);
+	}, [my_game_id, game_id]);
 
 	const handleUpload = useCallback(async (e: ChangeEvent<HTMLInputElement>) => {
 		if (e.target.files) {
@@ -87,12 +115,12 @@ const AddGame: NextPage<Props> = ({ game_id, my_game_id }) => {
 
 			reader.onload = e => {
 				setFrontCoverFile(reader.result);
+				myForm.setFieldValue("game.front_cover", reader.result);
 			};
 		}
 	}, []);
 
 	useEffect(() => {
-		console.log("LISTA");
 		let consoles: string[] = [];
 
 		Object.keys(EConsole).map(key => {
@@ -176,8 +204,8 @@ const AddGame: NextPage<Props> = ({ game_id, my_game_id }) => {
 							<div className={styles.inputCkEditor}>
 								<h3 className={styles.personalLabel}>Personal Notes</h3>
 								<CKEditor
-									initData={myForm.values.personalNotes}
-									onChange={editor =>
+									data={myForm.values.personalNotes}
+									onChange={(editor: any) =>
 										myForm.setFieldValue(
 											"personalNotes",
 											editor.editor.getData()

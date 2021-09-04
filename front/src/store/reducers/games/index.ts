@@ -27,6 +27,12 @@ const reducer = function (state = initialState, { type, payload }: any) {
 				game: payload
 			};
 		}
+		case Actions.SAVE_GAME: {
+			return {
+				...state,
+				game: payload
+			};
+		}
 		case Actions.ADD_MY_GAME: {
 			return {
 				...state,
@@ -40,6 +46,12 @@ const reducer = function (state = initialState, { type, payload }: any) {
 			};
 		}
 		case Actions.GET_MY_GAME: {
+			return {
+				...state,
+				myGame: payload
+			};
+		}
+		case Actions.UPDATE_MY_GAME: {
 			return {
 				...state,
 				myGame: payload

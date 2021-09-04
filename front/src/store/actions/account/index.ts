@@ -15,7 +15,6 @@ export function submitLogin(loginData: ILogin, callback?: Function) {
 	return async (dispatch: Dispatch, getState: Function) => {
 		try {
 			const response = await Api.post("/auth", loginData);
-
 			if (response.status === 200) {
 				const result = response.data;
 

@@ -36,10 +36,10 @@ const Home: NextPage = () => {
 			dispatch(
 				submitLogin(values, async (err: IError) => {
 					if (err && err.unauthorized) {
-						toast.error(err.unauthorized);
-					} else {
-						router.push("/library");
+						return toast.error(err.unauthorized);
 					}
+
+					router.push("/library");
 				})
 			);
 		}

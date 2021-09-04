@@ -1,6 +1,6 @@
 import { Dispatch } from "redux";
 import IError from "../../../interfaces/IError";
-import { IGame } from "../../../interfaces/IGame";
+import { IGame, IMyGame } from "../../../interfaces/IGame";
 import Api from "../../../services/api";
 
 export const GET_GAMES = "[GAME] GET_GAMES";
@@ -9,6 +9,7 @@ export const SAVE_GAME = "[GAME] SAVE_GAME";
 export const ADD_MY_GAME = "[GAME] ADD_MY_GAME";
 export const GET_MY_GAMES = "[GAME] GET_MY_GAMES";
 export const GET_MY_GAME = "[GAME] GET_MY_GAME";
+export const UPDATE_MY_GAME = "[GAME] UPDATE_MY_GAME";
 
 export function getGames(callback?: Function) {
 	return async (dispatch: Dispatch, getState: Function) => {
@@ -93,14 +94,21 @@ export function saveGame(gameData: IGame, callback?: Function) {
 		try {
 			const { token } = getState().account;
 
+			console.log(gameData);
+
 			const response = await Api.post(`/games`, gameData, {
 				headers: {
 					Authorization: `Bearer ${token}`
 				}
 			});
 
-			if (response.status === 200) {
+			console.log(response.status);
+
+			if (response.status === 200 || response.status === 201) {
 				const result = await response.data;
+
+				console.log("RESULT");
+				console.log(result);
 
 				dispatch({
 					type: SAVE_GAME,
@@ -125,16 +133,24 @@ export function saveGame(gameData: IGame, callback?: Function) {
 	};
 }
 
-export function addMyGame(gameId: number, callback?: Function) {
+export function addMyGame(
+	gameId: number,
+	gameAnnotation: IMyGame,
+	callback?: Function
+) {
 	return async (dispatch: Dispatch, getState: Function) => {
 		try {
 			const { token } = getState().account;
 
-			const response = await Api.post(`/games/myLibrary/${gameId}/add`, {
-				headers: {
-					Authorization: `Bearer ${token}`
+			const response = await Api.post(
+				`/games/myLibrary/${gameId}/add`,
+				gameAnnotation,
+				{
+					headers: {
+						Authorization: `Bearer ${token}`
+					}
 				}
-			});
+			);
 
 			if (response.status === 200) {
 				const result = await response.data;
@@ -216,6 +232,45 @@ export function getMyGame(myGameId: string, callback?: Function) {
 
 				dispatch({
 					type: GET_MY_GAME,
+					payload: result
+				});
+
+				return callback && callback();
+			} else {
+				const error: IError = {};
+
+				if (response.status === 401) {
+					// logout
+				}
+
+				return callback && callback(error);
+			}
+		} catch (err) {
+			return callback && callback(err);
+		}
+	};
+}
+
+export function updateMyGame(myGameData: IMyGame, callback?: Function) {
+	return async (dispatch: Dispatch, getState: Function) => {
+		const { token } = getState().account;
+
+		try {
+			const response = await Api.put(
+				"/games/myLibrary/" + myGameData.game.id,
+				myGameData,
+				{
+					headers: {
+						Authorization: `Bearer ${token}`
+					}
+				}
+			);
+
+			if (response.status === 200) {
+				const result = await response.data;
+
+				dispatch({
+					type: UPDATE_MY_GAME,
 					payload: result
 				});
 
