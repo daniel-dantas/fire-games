@@ -14,7 +14,10 @@ import Badge from "../../../../components/Badge";
 import Button from "../../../../components/Button";
 import { useRouter } from "next/router";
 import { route } from "next/dist/server/router";
-import { getMyGame } from "../../../../store/actions/games";
+import { deleteMygame, getMyGame } from "../../../../store/actions/games";
+import Swal from "sweetalert2";
+import IError from "../../../../interfaces/IError";
+import { toast } from "react-toastify";
 
 const Detail: NextPage = () => {
 	const router = useRouter();
@@ -32,6 +35,28 @@ const Detail: NextPage = () => {
 			pathname: "/library/add",
 			query: {
 				my_game: myGame.id
+			}
+		});
+	};
+
+	const handleDelete = async () => {
+		await Swal.fire({
+			title: "Attention",
+			icon: "info",
+			html: "Do you really want to cancel this event?",
+
+			showCancelButton: true,
+			cancelButtonText: "BACK",
+			confirmButtonText: "DELETE",
+			confirmButtonColor: "#4CC3EE",
+			showLoaderOnConfirm: true,
+			preConfirm: async () => {
+				dispatch(
+					deleteMygame(myGameId as string, (err: IError) => {
+						toast.success("Game successfully removed from library");
+						router.push("/my-library");
+					})
+				);
 			}
 		});
 	};
@@ -69,7 +94,7 @@ const Detail: NextPage = () => {
 									<Button styleType="Outlined" onClick={handleEdit}>
 										<FaEdit />
 									</Button>
-									<Button styleType="Primary">
+									<Button styleType="Primary" onClick={handleDelete}>
 										<FaTrashAlt />
 									</Button>
 								</div>

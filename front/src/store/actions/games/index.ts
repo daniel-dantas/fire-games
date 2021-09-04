@@ -10,6 +10,7 @@ export const ADD_MY_GAME = "[GAME] ADD_MY_GAME";
 export const GET_MY_GAMES = "[GAME] GET_MY_GAMES";
 export const GET_MY_GAME = "[GAME] GET_MY_GAME";
 export const UPDATE_MY_GAME = "[GAME] UPDATE_MY_GAME";
+export const DELETE_MY_GAME = "[GAME] DELETE_MY_GAME";
 
 export function getGames(callback?: Function) {
 	return async (dispatch: Dispatch, getState: Function) => {
@@ -271,6 +272,41 @@ export function updateMyGame(myGameData: IMyGame, callback?: Function) {
 
 				dispatch({
 					type: UPDATE_MY_GAME,
+					payload: result
+				});
+
+				return callback && callback();
+			} else {
+				const error: IError = {};
+
+				if (response.status === 401) {
+					// logout
+				}
+
+				return callback && callback(error);
+			}
+		} catch (err) {
+			return callback && callback(err);
+		}
+	};
+}
+
+export function deleteMygame(myGameId: string | number, callback?: Function) {
+	return async (dispatch: Dispatch, getState: Function) => {
+		const { token } = getState().account;
+
+		try {
+			const response = await Api.delete("/games/myLibrary/" + myGameId, {
+				headers: {
+					Authorization: `Bearer ${token}`
+				}
+			});
+
+			if (response.status === 200) {
+				const result = await response.data;
+
+				dispatch({
+					type: DELETE_MY_GAME,
 					payload: result
 				});
 

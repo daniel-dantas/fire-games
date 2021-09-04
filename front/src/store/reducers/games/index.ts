@@ -57,6 +57,11 @@ const reducer = function (state = initialState, { type, payload }: any) {
 				myGame: payload
 			};
 		}
+		case Actions.DELETE_MY_GAME: {
+			return {
+				...state
+			};
+		}
 		default:
 			return state;
 	}
