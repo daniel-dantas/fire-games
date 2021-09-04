@@ -145,6 +145,16 @@ public class GameController {
     public ResponseEntity deleteMyAnnotation (@PathVariable("id") Long id) {
         if (!this.myGameRepository.existsById(id)) throw new NotFoundException("There is no game with this id");
 
+        UserDetails userDetail = (UserDetails) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+
+        User user = this.userRepository.getByEmail(userDetail.getUsername()).get();
+
+        MyGameAnnotation myGame = this.myGameRepository.findById(id).get();
+
+        user.getMyGames().remove(myGame);
+
+        this.userRepository.save(user);
+
         this.myGameRepository.deleteById(id);
 
         return new ResponseEntity(HttpStatus.OK);
