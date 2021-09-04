@@ -16,13 +16,14 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.UserDetails;
+import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.ArrayList;
 import java.util.List;
 
+@CrossOrigin (origins = "http://localhost:3000")
 @RestController
-@CrossOrigin
 @RequestMapping("/games")
 public class GameController {
 
@@ -122,7 +123,7 @@ public class GameController {
     }
 
     @GetMapping("/myLibrary/{id}")
-    public ResponseEntity<MyGameAnnotationResponseDTO> getMyAnnotation(@PathVariable("id") Long id) {
+    public ResponseEntity<MyGameAnnotationResponseDTO> getMyAnnotation(@PathVariable("id") @Validated Long id) {
         if (!this.myGameRepository.existsById(id)) throw new NotFoundException("There is no game with this id");
         return new ResponseEntity<MyGameAnnotationResponseDTO>(MyGameAnnotationResponseDTO.parseGameAnnotation(this.myGameRepository.findById(id).get()), HttpStatus.OK);
     }
