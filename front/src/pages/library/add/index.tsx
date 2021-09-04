@@ -74,6 +74,7 @@ const AddGame: NextPage<Props> = ({ game_id, my_game_id }) => {
 					})
 				);
 			} else if (game_id) {
+				dispatch(addMyGame(game_id as any, values as any));
 			} else {
 				dispatch(
 					saveGame(values.game as any, (err: IError, gameId: number) => {
@@ -96,7 +97,7 @@ const AddGame: NextPage<Props> = ({ game_id, my_game_id }) => {
 			setFrontCoverFile(game.front_cover);
 		} else if (myGame?.id && my_game_id) {
 			myForm.setValues(myGame as any);
-			// setFrontCoverFile(myGame.game.front_cover);
+			setFrontCoverFile(myGame.game.front_cover);
 		}
 	}, [game, myGame]);
 
@@ -115,7 +116,7 @@ const AddGame: NextPage<Props> = ({ game_id, my_game_id }) => {
 
 			reader.onload = e => {
 				setFrontCoverFile(reader.result);
-				myForm.setFieldValue("game.front_cover", reader.result);
+				// myForm.setFieldValue("game.front_cover", reader.result);
 			};
 		}
 	}, []);
@@ -147,7 +148,11 @@ const AddGame: NextPage<Props> = ({ game_id, my_game_id }) => {
 									className={styles.frontCover}
 									src={frontCoverFile}
 									alt=""
-									onClick={e => setFrontCoverFile(null)}
+									onClick={e =>
+										!Boolean(game_id) &&
+										!Boolean(my_game_id) &&
+										setFrontCoverFile(null)
+									}
 								/>
 							) : (
 								<label htmlFor="front-cover">
@@ -164,6 +169,7 @@ const AddGame: NextPage<Props> = ({ game_id, my_game_id }) => {
 								<input
 									placeholder="Title"
 									type="text"
+									disabled={Boolean(game_id) || Boolean(my_game_id)}
 									{...myForm.getFieldProps("game.title")}
 								/>
 							</div>
@@ -171,11 +177,13 @@ const AddGame: NextPage<Props> = ({ game_id, my_game_id }) => {
 								<input
 									placeholder="Year"
 									type="text"
+									disabled={Boolean(game_id) || Boolean(my_game_id)}
 									{...myForm.getFieldProps("game.year")}
 								/>
 								<select
 									defaultValue="PC"
 									{...myForm.getFieldProps("game.console")}
+									disabled={Boolean(game_id) || Boolean(my_game_id)}
 								>
 									{consoles.map(console => (
 										<option key={console}>{console}</option>
