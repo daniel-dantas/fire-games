@@ -7,7 +7,7 @@ function persistReducers(reducers: any): any {
 		{
 			key: "fire-games-website",
 			storage,
-			whitelist: ["login"]
+			whitelist: ["account"]
 		},
 		reducers
 	);

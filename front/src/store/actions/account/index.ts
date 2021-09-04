@@ -1,7 +1,7 @@
 import { Dispatch } from "redux";
 import { ILogin } from "../../../interfaces/IAccount";
 import IError from "../../../interfaces/IError";
-import * as Api from "../../../services/api";
+import Api from "../../../services/api";
 
 export const SUBMIT_LOGIN = "[ACCOUNT] SUBMIT_LOGIN";
 export const SUBMIT_LOGIN_SUCCESS = "[ACCOUNT] SUBMIT_LOGIN";
@@ -13,19 +13,14 @@ export const SUBMIT_REGISTER_FAILED = "[ACCOUNT] SUBMIT_REGISTER_FAILED";
 
 export function submitLogin(loginData: ILogin, callback?: Function) {
 	return async (dispatch: Dispatch, getState: Function) => {
-		dispatch({ type: SUBMIT_LOGIN });
-
 		try {
-			const response = await Api.sendPost("/auth", loginData);
-
-			console.log("RESPONSE");
-			console.log(response.status);
+			const response = await Api.post("/auth", loginData);
 
 			if (response.status === 200) {
-				const result = await response.json();
+				const result = response.data;
 
 				dispatch({
-					type: SUBMIT_LOGIN_SUCCESS,
+					type: SUBMIT_LOGIN,
 					payload: result
 				});
 
@@ -37,17 +32,9 @@ export function submitLogin(loginData: ILogin, callback?: Function) {
 					error.unauthorized = "Incorrect email or password";
 				}
 
-				dispatch({
-					type: SUBMIT_LOGIN_FAILED
-				});
-
 				return callback && callback(error);
 			}
 		} catch (err) {
-			dispatch({
-				type: SUBMIT_LOGIN_FAILED
-			});
-
 			return callback && callback(err);
 		}
 	};
@@ -55,16 +42,14 @@ export function submitLogin(loginData: ILogin, callback?: Function) {
 
 export function submitRegister(registerData: ILogin, callback?: Function) {
 	return async (dispatch: Function, getState: Function) => {
-		dispatch({ type: SUBMIT_REGISTER });
-
 		try {
-			const response = await Api.sendPost("/user/register", registerData);
+			const response = await Api.post("/user/register", registerData);
 
 			if (response.status === 200) {
-				const result = await response.json();
+				const result = await response.data;
 
 				dispatch({
-					type: SUBMIT_REGISTER_SUCCESS,
+					type: SUBMIT_REGISTER,
 					payload: result
 				});
 
@@ -78,18 +63,9 @@ export function submitRegister(registerData: ILogin, callback?: Function) {
 					error.conflict = "There is already an account with this email";
 				}
 
-				dispatch({
-					type: SUBMIT_REGISTER_FAILED
-				});
-
 				return callback && callback(error);
 			}
 		} catch (err) {
-			console.log(err);
-			dispatch({
-				type: SUBMIT_REGISTER_FAILED
-			});
-
 			return callback && callback(err);
 		}
 	};

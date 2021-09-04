@@ -33,11 +33,9 @@ const GameCard: React.FC<Props> = ({ game, type, my_game }) => {
 
 	return (
 		<div className={styles.root} onClick={handleClick}>
-			<Image
+			<img
 				src={game ? game?.front_cover : my_game?.game?.front_cover + ""}
 				alt=""
-				width={100}
-				height={100}
 			/>
 			<div className={styles.content_info}>
 				<h3>{game ? game?.title : my_game?.game?.title}</h3>
@@ -45,6 +43,7 @@ const GameCard: React.FC<Props> = ({ game, type, my_game }) => {
 				<br />
 				<div className={styles.badge_content}>
 					<Badge>{game ? game?.console : my_game?.game?.console}</Badge>
+					<Badge>{game ? game?.age : my_game?.game?.age} Years</Badge>
 				</div>
 			</div>
 		</div>

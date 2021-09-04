@@ -1,26 +1,31 @@
 import { NextPage } from "next";
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import GameCard from "../../components/GameCard";
 import HeaderBar from "../../components/HeaderBar";
 import styles from "./styles.module.scss";
 import { Pagination } from "@material-ui/lab";
 import { IGame } from "../../interfaces/IGame";
-import { useSelector } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import IState from "../../interfaces/IState";
+import { getGames } from "../../store/actions/games";
 // import { Container } from './styles';
 
 const Library: NextPage = () => {
-	const [gamesLibrary, setgamesLibrary] = useState<IGame[]>([]);
+	const dispatch = useDispatch();
 
 	const { games } = useSelector<IState, { games: IGame[] }>(
-		state => state.game
+		state => state.games
 	);
+
+	useEffect(() => {
+		dispatch(getGames());
+	}, [dispatch]);
 
 	return (
 		<div className={styles.root}>
 			<HeaderBar />
 			<div className={styles.container}>
-				{games.map((game, index) => (
+				{games?.map((game, index) => (
 					<GameCard key={index} game={game} type="GAME_LIBRARY" />
 				))}
 			</div>

@@ -35,9 +35,8 @@ const Home: NextPage = () => {
 			dispatch(
 				submitLogin(values, async (err: IError) => {
 					if (err && err.unauthorized) {
-						await toast.error(err.unauthorized);
+						toast.error(err.unauthorized);
 					} else {
-						router.push("/library");
 					}
 				})
 			);

@@ -1,9 +1,9 @@
 import { combineReducers } from "redux";
-import game from "./game";
+import games from "./games";
 import account from "./account";
 
 const reducers = {
-	game,
+	games,
 	account
 };
 
