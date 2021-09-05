@@ -26,7 +26,7 @@ import org.springframework.web.bind.annotation.*;
 import java.util.ArrayList;
 import java.util.List;
 
-@CrossOrigin (origins = "http://localhost:8081")
+@CrossOrigin (origins = "http://localhost:3000")
 @RestController
 @RequestMapping("/games")
 public class GameController {

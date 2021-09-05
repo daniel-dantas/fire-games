@@ -37,7 +37,7 @@ const Home: NextPage = () => {
 		onSubmit: values => {
 			dispatch(
 				submitRegister(values, (err: IError) => {
-					if (err.conflict) {
+					if (err && err?.conflict) {
 						toast.error(err.conflict);
 						registerForm.setFieldError("email", err.conflict);
 					} else {
