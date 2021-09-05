@@ -13,7 +13,7 @@ import styles from "./styles.module.scss";
 import { route } from "next/dist/server/router";
 import { parseCookies } from "nookies";
 
-const Home: NextPage = () => {
+const Login: NextPage = () => {
 	const router = useRouter();
 
 	const [failed, setFailed] = useState();
@@ -102,4 +102,4 @@ const Home: NextPage = () => {
 	);
 };
 
-export default Home;
+export default Login;
