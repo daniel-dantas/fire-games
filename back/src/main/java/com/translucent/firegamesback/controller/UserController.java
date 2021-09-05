@@ -4,6 +4,7 @@ import com.translucent.firegamesback.dto.RegisterResponseDTO;
 import com.translucent.firegamesback.exceptions.DuplicateException;
 import com.translucent.firegamesback.model.User;
 import com.translucent.firegamesback.repository.UserRepository;
+import io.swagger.models.Response;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -12,6 +13,7 @@ import org.springframework.web.bind.annotation.*;
 
 import java.util.ArrayList;
 
+@CrossOrigin (origins = "http://localhost:8081")
 @RestController
 @RequestMapping("/user")
 public class UserController {
@@ -28,6 +30,11 @@ public class UserController {
         user.setMyGames(new ArrayList());
         User userSaved = this.userRepository.save(user);
         return new ResponseEntity<>(new RegisterResponseDTO(userSaved.getId(), userSaved.getEmail()), HttpStatus.CREATED);
+    }
+
+    @PostMapping("/validate")
+    public ResponseEntity<?> validate() {
+        return new ResponseEntity<>(HttpStatus.OK);
     }
 
 }

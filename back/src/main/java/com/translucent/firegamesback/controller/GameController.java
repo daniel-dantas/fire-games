@@ -16,11 +16,13 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.UserDetails;
+import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.ArrayList;
 import java.util.List;
 
+@CrossOrigin (origins = "http://localhost:8081")
 @RestController
 @RequestMapping("/games")
 public class GameController {
@@ -45,7 +47,7 @@ public class GameController {
 
         List<GameResponseDTO> gamesResponse = new ArrayList<>();
 
-        List<Game> games = this.gameRepository.findAll();
+        List<Game> games = this.gameRepository.findAllByOrderByYearDesc();
 
         for(Game game : games) {
             gamesResponse.add(GameResponseDTO.parseGame(game));
@@ -121,7 +123,7 @@ public class GameController {
     }
 
     @GetMapping("/myLibrary/{id}")
-    public ResponseEntity<MyGameAnnotationResponseDTO> getMyAnnotation(@PathVariable("id") Long id) {
+    public ResponseEntity<MyGameAnnotationResponseDTO> getMyAnnotation(@PathVariable("id") @Validated Long id) {
         if (!this.myGameRepository.existsById(id)) throw new NotFoundException("There is no game with this id");
         return new ResponseEntity<MyGameAnnotationResponseDTO>(MyGameAnnotationResponseDTO.parseGameAnnotation(this.myGameRepository.findById(id).get()), HttpStatus.OK);
     }
@@ -142,6 +144,16 @@ public class GameController {
     @DeleteMapping("/myLibrary/{id}")
     public ResponseEntity deleteMyAnnotation (@PathVariable("id") Long id) {
         if (!this.myGameRepository.existsById(id)) throw new NotFoundException("There is no game with this id");
+
+        UserDetails userDetail = (UserDetails) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+
+        User user = this.userRepository.getByEmail(userDetail.getUsername()).get();
+
+        MyGameAnnotation myGame = this.myGameRepository.findById(id).get();
+
+        user.getMyGames().remove(myGame);
+
+        this.userRepository.save(user);
 
         this.myGameRepository.deleteById(id);
 

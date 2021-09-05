@@ -1,8 +1,22 @@
 .root {
+
+    .titleLibrary {
+        // background-color: blue;
+        padding: 20px 8%;
+        padding-top: 40px;
+
+        h3 {
+            font-size: 1.7em;
+            font-weight: 300;
+            color: #bdbdbd;
+            font-style: italic;
+        }
+
+    }
     .container {
         width: 100%;
         // background-color: red;
-        padding: 40px 90px;
+        padding: 0 90px;
 
         display: grid;
         grid-template-columns: auto auto auto auto;

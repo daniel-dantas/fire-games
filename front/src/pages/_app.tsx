@@ -4,8 +4,11 @@ import Head from "next/head";
 import { Provider } from "react-redux";
 import { PersistGate } from "redux-persist/integration/react";
 import { persistor, store } from "../store";
+import { Slide, ToastContainer } from "react-toastify";
+import { createWrapper } from "next-redux-wrapper";
+import { FC } from "react";
 
-function MyApp({ Component, pageProps }: AppProps) {
+const WrappedApp: FC<AppProps> = ({ Component, pageProps }) => {
 	return (
 		<>
 			<Head>
@@ -14,9 +17,19 @@ function MyApp({ Component, pageProps }: AppProps) {
 			<Provider store={store}>
 				<PersistGate persistor={persistor}>
 					<Component {...pageProps} />
+					<ToastContainer
+						transition={Slide}
+						autoClose={3000}
+						newestOnTop
+						closeOnClick
+					/>
 				</PersistGate>
 			</Provider>
 		</>
 	);
-}
-export default MyApp;
+};
+const makeStore = () => store;
+
+const wrapper = createWrapper(makeStore, { debug: true });
+
+export default wrapper.withRedux(WrappedApp);

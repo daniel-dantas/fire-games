@@ -1,26 +1,49 @@
-import { style } from "@material-ui/system";
 import { useFormik } from "formik";
-import { NextPage } from "next";
+import { GetServerSideProps, NextPage } from "next";
 import { useRouter } from "next/router";
 import React, { useCallback, useState } from "react";
+import { useDispatch } from "react-redux";
+import { toast } from "react-toastify";
 import Button from "../components/Button";
+import IError from "../interfaces/IError";
+import { submitLogin } from "../store/actions/account";
+import * as yup from "yup";
 
 import styles from "./styles.module.scss";
+import { route } from "next/dist/server/router";
+import { parseCookies } from "nookies";
 
 const Home: NextPage = () => {
 	const router = useRouter();
+
+	const [failed, setFailed] = useState();
+
+	const dispatch = useDispatch();
 
 	const loginForm = useFormik({
 		initialValues: {
 			email: "",
 			password: ""
 		},
+		validationSchema: yup.object().shape({
+			email: yup.string().required("You need to fill in the email"),
+			password: yup
+				.string()
+				.required("You need to fill in the passwords")
+				.min(6, "Password must be longer than 6 characters")
+		}),
 		onSubmit: values => {
-			router.push("/library");
+			dispatch(
+				submitLogin(values, async (err: IError) => {
+					if (err && err.unauthorized) {
+						return toast.error(err.unauthorized);
+					}
+
+					router.push("/library");
+				})
+			);
 		}
 	});
-
-	const handleLogin = useCallback(() => {}, []);
 
 	return (
 		<div className={styles.root}>
@@ -40,13 +63,25 @@ const Home: NextPage = () => {
 					<input
 						type="email"
 						placeholder="Email"
+						required
 						{...loginForm.getFieldProps("email")}
 					/>
+					{loginForm.touched.email && loginForm.errors.email && (
+						<div className={styles.errorForm}>
+							<span>* {loginForm.errors.email}</span>
+						</div>
+					)}
 					<input
 						type="password"
 						placeholder="Password"
+						required
 						{...loginForm.getFieldProps("password")}
 					/>
+					{loginForm.touched.password && loginForm.errors.password && (
+						<div className={styles.errorForm}>
+							<span>* {loginForm.errors.password}</span>
+						</div>
+					)}
 
 					<Button styleType="Primary" type="submit">
 						Login

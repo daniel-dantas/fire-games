@@ -1,21 +1,31 @@
 import { NextPage } from "next";
-import React from "react";
-import { useSelector } from "react-redux";
+import React, { useEffect } from "react";
+import { useDispatch, useSelector } from "react-redux";
 import GameCard from "../../components/GameCard";
 import HeaderBar from "../../components/HeaderBar";
+import widthAuth from "../../hooks/widthAuth";
 import { IMyGame } from "../../interfaces/IGame";
 import IState from "../../interfaces/IState";
-
+import { getMyGames } from "../../store/actions/games";
 import styles from "./styles.module.scss";
 
 const MyLibrary: NextPage = () => {
+	const dispatch = useDispatch();
+
 	const { myGames } = useSelector<IState, { myGames: IMyGame[] }>(
-		state => state.game
+		state => state.games
 	);
+
+	useEffect(() => {
+		dispatch(getMyGames());
+	}, [dispatch]);
 
 	return (
 		<div className={styles.root}>
-			<HeaderBar />
+			<HeaderBar typeLoad="LOAD_MY_GAMES" />
+			<div className={styles.titleLibrary}>
+				<h3>My Library</h3>
+			</div>
 			<div className={styles.container}>
 				{myGames.map((myGame, index) => (
 					<GameCard key={index} my_game={myGame} type="GAME_MY_LIBRARY" />
@@ -26,3 +36,5 @@ const MyLibrary: NextPage = () => {
 };
 
 export default MyLibrary;
+
+export const getServerSideProps = widthAuth;
