@@ -143,7 +143,7 @@ const AddGame: NextPage<Props> = ({ game: game_id, my_game: my_game_id }) => {
 
 	return (
 		<div className={styles.root}>
-			<HeaderBar />
+			<HeaderBar typeLoad="LOAD_GAMES" />
 			<div className={styles.container}>
 				<form onSubmit={myForm.handleSubmit}>
 					<div className={styles.formContent}>

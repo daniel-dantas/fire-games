@@ -15,6 +15,7 @@
     "axios": "^0.21.1",
     "ckeditor4-react": "^2.0.1",
     "dayjs": "^1.10.6",
+    "downshift": "^6.1.7",
     "firebase": "^8.0.1",
     "formik": "^2.2.9",
     "isomorphic-fetch": "^3.0.0",

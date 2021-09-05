@@ -70,7 +70,7 @@ const Detail: NextPage = () => {
 
 	return (
 		<div className={styles.root}>
-			<HeaderBar />
+			<HeaderBar typeLoad="LOAD_MY_GAMES" />
 			<div className={styles.container}>
 				<div className={styles.detailContainer}>
 					<div className={styles.formContent}>

@@ -2,7 +2,7 @@
     border: 1px solid #C4C4C4;
     cursor: pointer;
 
-    position: relative;
+    // position: relative;
 
     &:hover {
         border: 1px solid var(--secondary);
@@ -22,7 +22,8 @@
 
     .content_info{
         // background-color: red;
-        padding: 0 20px;
+        // padding: 0 20px;
+        padding-left: 20px;
 
         span {
             margin-left: 5px;
@@ -30,8 +31,14 @@
         
         .badge_content {
             margin-left: -10px;
-            position: absolute;
+            // position: absolute;
+            // height: 10vh;
+            display: flex;
+            align-items: flex-end;
             bottom: 40px;
+            width: 100% !important;
+
+            
         }
 
         

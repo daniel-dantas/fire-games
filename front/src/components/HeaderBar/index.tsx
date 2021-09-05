@@ -5,8 +5,14 @@ import styles from "./styles.module.scss";
 import { useDispatch } from "react-redux";
 import { logout } from "../../store/actions/account";
 import { useRouter } from "next/router";
+import FormSearch from "../FormSearch";
 
-const HeaderBar: React.FC = () => {
+interface Props {
+	confirmSearch?: Function;
+	typeLoad: "LOAD_GAMES" | "LOAD_MY_GAMES";
+}
+
+const HeaderBar: React.FC<Props> = ({ typeLoad }) => {
 	const dispatch = useDispatch();
 	const router = useRouter();
 
@@ -21,7 +27,8 @@ const HeaderBar: React.FC = () => {
 				<Image src="/images/logo_2.svg" alt="teste" width={250} height={70} />
 			</div>
 			<form className={styles.content_search}>
-				<input placeholder="Find Game" />
+				{/* <input placeholder="Find Game" /> */}
+				<FormSearch typeLoad={typeLoad} />
 			</form>
 			<div className={styles.content_links}>
 				<Link href="/library">Library</Link>
