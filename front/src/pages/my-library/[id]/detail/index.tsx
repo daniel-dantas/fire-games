@@ -44,7 +44,7 @@ const Detail: NextPage = () => {
 		await Swal.fire({
 			title: "Attention",
 			icon: "info",
-			html: "Do you really want to cancel this event?",
+			html: "Are you sure you want to delete this game?",
 
 			showCancelButton: true,
 			cancelButtonText: "BACK",
@@ -64,8 +64,6 @@ const Detail: NextPage = () => {
 
 	useEffect(() => {
 		if (myGameId) {
-			console.log("GAME ID");
-			console.log(myGameId);
 			dispatch(getMyGame(myGameId as string));
 		}
 	}, [dispatch, myGameId]);

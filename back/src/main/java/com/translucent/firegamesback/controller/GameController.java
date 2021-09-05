@@ -47,7 +47,7 @@ public class GameController {
 
         List<GameResponseDTO> gamesResponse = new ArrayList<>();
 
-        List<Game> games = this.gameRepository.findAll();
+        List<Game> games = this.gameRepository.findAllByOrderByYearDesc();
 
         for(Game game : games) {
             gamesResponse.add(GameResponseDTO.parseGame(game));
