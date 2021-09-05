@@ -24,6 +24,7 @@ import IState from "../../../interfaces/IState";
 import IError from "../../../interfaces/IError";
 import { useRouter } from "next/router";
 import widthAuth from "../../../hooks/widthAuth";
+import Storage from "../../../services/storage";
 interface Props {
 	game?: string;
 	my_game?: string;
@@ -118,11 +119,10 @@ const AddGame: NextPage<Props> = ({ game: game_id, my_game: my_game_id }) => {
 		if (e.target.files) {
 			const reader = new FileReader();
 			const url = reader.readAsDataURL(e.target.files[0]);
-
-			reader.onload = e => {
+			reader.onload = async e => {
 				setFrontCoverFile(reader.result);
-				// myForm.setFieldValue("game.front_cover", reader.result);
 			};
+			myForm.setFieldValue("game.front_cover", e.target.files[0]);
 		}
 	}, []);
 

@@ -2,6 +2,8 @@ import { Dispatch } from "redux";
 import IError from "../../../interfaces/IError";
 import { IGame, IMyGame } from "../../../interfaces/IGame";
 import Api from "../../../services/api";
+import Storage from "../../../services/storage";
+import { v4 as uuid } from "uuid";
 
 export const GET_GAMES = "[GAME] GET_GAMES";
 export const GET_GAME = "[GAME] GET_GAME";
@@ -94,8 +96,9 @@ export function saveGame(gameData: IGame, callback?: Function) {
 	return async (dispatch: Dispatch, getState: Function) => {
 		try {
 			const { token } = getState().account;
+			const front_cover = await Storage.upload(gameData.front_cover, uuid());
 
-			console.log(gameData);
+			gameData.front_cover = front_cover;
 
 			const response = await Api.post(`/games`, gameData, {
 				headers: {
