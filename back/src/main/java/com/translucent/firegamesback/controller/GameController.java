@@ -11,6 +11,10 @@ import com.translucent.firegamesback.repository.MyGameAnnotationRepository;
 import com.translucent.firegamesback.repository.UserRepository;
 import com.translucent.firegamesback.validations.GameValidation;
 import com.translucent.firegamesback.validations.MyGameAnnotationValidation;
+import io.swagger.annotations.ApiOperation;
+import io.swagger.annotations.ApiParam;
+import io.swagger.annotations.ApiResponse;
+import io.swagger.annotations.ApiResponses;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -22,7 +26,7 @@ import org.springframework.web.bind.annotation.*;
 import java.util.ArrayList;
 import java.util.List;
 
-@CrossOrigin (origins = "http://localhost:8081")
+@CrossOrigin (origins = "http://localhost:3000")
 @RestController
 @RequestMapping("/games")
 public class GameController {
@@ -36,12 +40,22 @@ public class GameController {
     @Autowired
     private UserRepository userRepository;
 
+    @ApiOperation("Route responsible for created a game")
+    @ApiResponses({
+            @ApiResponse(code = 201, message="Game created successfully"),
+            @ApiResponse(code = 401, message = "Invalid token, request refused  ")
+    })
     @PostMapping
     public ResponseEntity<GameResponseDTO> store (@RequestBody Game game) {
         GameValidation.validate(game);
         return new ResponseEntity<GameResponseDTO>(GameResponseDTO.parseGame(this.gameRepository.save(game)), HttpStatus.CREATED);
     }
 
+    @ApiOperation("Route responsible for listing the games")
+    @ApiResponses({
+            @ApiResponse(code = 200, message="Games listed successfully"),
+            @ApiResponse(code = 401, message = "Invalid token, request refused  ")
+    })
     @GetMapping
     public ResponseEntity<List<GameResponseDTO>> index () {
 
@@ -56,16 +70,28 @@ public class GameController {
         return new ResponseEntity<List<GameResponseDTO>>(gamesResponse, HttpStatus.OK);
     }
 
+    @ApiOperation("Route responsible for collecting data from a specific game")
+    @ApiResponses({
+            @ApiResponse(code = 200, message="Game data loaded successfully"),
+            @ApiResponse(code = 401, message = "Invalid token, request refused "),
+            @ApiResponse(code = 404, message = "No game with this id found")
+    })
     @GetMapping("/{id}")
-    public ResponseEntity<GameResponseDTO> show (@PathVariable("id") Long id) {
+    public ResponseEntity<GameResponseDTO> show (@ApiParam(value = "game id to be detailed", required = true) @PathVariable("id") Long id) {
         if (!this.gameRepository.existsById(id)) throw new NotFoundException("There is no game with this id");
         Game game = this.gameRepository.findById(id).get();
 
         return new ResponseEntity<GameResponseDTO>(GameResponseDTO.parseGame(game), HttpStatus.OK);
     }
 
+    @ApiOperation("Route responsible for deleting game data")
+    @ApiResponses({
+            @ApiResponse(code = 200, message="Game successfully deleted"),
+            @ApiResponse(code = 401, message = "Invalid token, request refused"),
+            @ApiResponse(code = 404, message = "No game with this id found")
+    })
     @DeleteMapping("/{id}")
-    public ResponseEntity<?> delete (@PathVariable("id") Long id){
+    public ResponseEntity<?> delete (@ApiParam(value = "game id to be deleted", required = true) @PathVariable("id") Long id){
         if (!this.gameRepository.existsById(id)) throw new NotFoundException("There is no game with this id");
 
         this.gameRepository.deleteById(id);
@@ -73,8 +99,14 @@ public class GameController {
         return new ResponseEntity(HttpStatus.OK);
     }
 
+    @ApiOperation("Responsible route update game data")
+    @ApiResponses({
+            @ApiResponse(code = 200, message="Game successfully updated"),
+            @ApiResponse(code = 401, message = "Invalid token, request refused"),
+            @ApiResponse(code = 404, message = "No game with this id found")
+    })
     @PutMapping("/{id}")
-    public ResponseEntity<?> update (@PathVariable("id") Long id, @RequestBody Game game) {
+    public ResponseEntity<?> update (@ApiParam(value = "game id to be data updated", required = true) @PathVariable("id") Long id, @RequestBody Game game) {
         if (!this.gameRepository.existsById(id)) throw new NotFoundException("There is no game with this id");
         return gameRepository.findById(id).map(item -> {
             item = game;
@@ -84,8 +116,14 @@ public class GameController {
         }).orElse(ResponseEntity.notFound().build());
     }
 
+    @ApiOperation("Route responsible for adding a game to the user's library")
+    @ApiResponses({
+            @ApiResponse(code = 200, message="Games successfully listing"),
+            @ApiResponse(code = 401, message = "Invalid token, request refused"),
+            @ApiResponse(code = 404, message = "No game with this id found")
+    })
     @PostMapping("/myLibrary/{id}/add")
-    public ResponseEntity<MyGameAnnotationResponseDTO> addLibrary (@PathVariable("id") Long id, @RequestBody MyGameAnnotation myGame) {
+    public ResponseEntity<MyGameAnnotationResponseDTO> addLibrary (@ApiParam(value = "game id", required = true) @PathVariable("id") Long id, @RequestBody MyGameAnnotation myGame) {
 
         if (!this.gameRepository.existsById(id)) throw new NotFoundException("There is no game with this id");
 
@@ -105,7 +143,11 @@ public class GameController {
         return new ResponseEntity<MyGameAnnotationResponseDTO>(MyGameAnnotationResponseDTO.parseGameAnnotation(gameSaved), HttpStatus.CREATED);
 
     }
-
+    @ApiOperation("Route responsible for listing games added to user library")
+    @ApiResponses({
+            @ApiResponse(code = 200, message="Games loaded successfully"),
+            @ApiResponse(code = 401, message = "Invalid token, request refused"),
+    })
     @GetMapping("/myLibrary")
     public ResponseEntity<List<MyGameAnnotationResponseDTO>> myLibrary (){
 
@@ -122,14 +164,25 @@ public class GameController {
         return new ResponseEntity<List<MyGameAnnotationResponseDTO>>(myGamesResponse, HttpStatus.OK);
     }
 
+    @ApiOperation("Route responsible for displaying data from a specific game in the user's library")
+    @ApiResponses({
+            @ApiResponse(code = 200, message="game data loaded successfully"),
+            @ApiResponse(code = 401, message = "Invalid token, request refused"),
+            @ApiResponse(code = 404, message = "No game with this id found")
+    })
     @GetMapping("/myLibrary/{id}")
-    public ResponseEntity<MyGameAnnotationResponseDTO> getMyAnnotation(@PathVariable("id") @Validated Long id) {
+    public ResponseEntity<MyGameAnnotationResponseDTO> getMyAnnotation(@ApiParam(value = "game id", required = true) @PathVariable("id") @Validated Long id) {
         if (!this.myGameRepository.existsById(id)) throw new NotFoundException("There is no game with this id");
         return new ResponseEntity<MyGameAnnotationResponseDTO>(MyGameAnnotationResponseDTO.parseGameAnnotation(this.myGameRepository.findById(id).get()), HttpStatus.OK);
     }
-
+    @ApiOperation("Route responsible for updating user library game")
+    @ApiResponses({
+            @ApiResponse(code = 200, message="Game updated successfully"),
+            @ApiResponse(code = 401, message = "Invalid token, request refused"),
+            @ApiResponse(code = 404, message = "No game with this id found")
+    })
     @PutMapping("/myLibrary/{id}")
-    public ResponseEntity<MyGameAnnotationResponseDTO> editMyAnnotation (@PathVariable("id") Long id, @RequestBody MyGameAnnotation gameAnnotation) {
+    public ResponseEntity<MyGameAnnotationResponseDTO> editMyAnnotation (@ApiParam(value = "game id", required = true) @PathVariable("id") Long id, @RequestBody MyGameAnnotation gameAnnotation) {
         if (!this.myGameRepository.existsById(id)) throw new NotFoundException("There is no game with this id");
 
         return this.myGameRepository.findById(id).map(item -> {
@@ -141,8 +194,14 @@ public class GameController {
         }).orElse(ResponseEntity.notFound().build());
     }
 
+    @ApiOperation("Route responsible for removing a game from the user's library")
+    @ApiResponses({
+            @ApiResponse(code = 200, message="Game updated successfully"),
+            @ApiResponse(code = 401, message = "Invalid token, request refused"),
+            @ApiResponse(code = 404, message = "No game with this id found")
+    })
     @DeleteMapping("/myLibrary/{id}")
-    public ResponseEntity deleteMyAnnotation (@PathVariable("id") Long id) {
+    public ResponseEntity deleteMyAnnotation (@ApiParam(value = "game id", required = true) @PathVariable("id") Long id) {
         if (!this.myGameRepository.existsById(id)) throw new NotFoundException("There is no game with this id");
 
         UserDetails userDetail = (UserDetails) SecurityContextHolder.getContext().getAuthentication().getPrincipal();

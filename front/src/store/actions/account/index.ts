@@ -47,13 +47,17 @@ export function submitRegister(registerData: ILogin, callback?: Function) {
 
 			return callback && callback(null);
 		} catch (err) {
+			console.log(err);
 			let error: IError = {};
 
-			if (err.response.status === 409) {
+			console.log("ERROR");
+			console.log(err?.response?.status);
+
+			if (err?.response?.status === 409) {
 				error.conflict = "There is already an account with this email";
 			}
 
-			return callback && callback(error);
+			return callback && callback();
 		}
 	};
 }

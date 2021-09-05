@@ -26,6 +26,7 @@ import { useRouter } from "next/router";
 import widthAuth from "../../../hooks/widthAuth";
 import Storage from "../../../services/storage";
 import { toast } from "react-toastify";
+import Loading from "../../../components/Loading";
 interface Props {
 	game?: string;
 	my_game?: string;
@@ -104,6 +105,9 @@ const AddGame: NextPage<Props> = ({ game: game_id, my_game: my_game_id }) => {
 					})
 				);
 			}
+		},
+		onReset: () => {
+			router.push("/library");
 		}
 	});
 
@@ -151,11 +155,12 @@ const AddGame: NextPage<Props> = ({ game: game_id, my_game: my_game_id }) => {
 		console.log(game_id);
 	}, [game_id]);
 
-	return !loading ? (
+	return (
 		<div className={styles.root}>
+			{loading && <Loading />}
 			<HeaderBar typeLoad="LOAD_GAMES" />
 			<div className={styles.container}>
-				<form onSubmit={myForm.handleSubmit}>
+				<form onSubmit={myForm.handleSubmit} onReset={myForm.handleReset}>
 					<div className={styles.formContent}>
 						<div className={styles.containerUpload}>
 							{frontCoverFile ? (
@@ -292,8 +297,6 @@ const AddGame: NextPage<Props> = ({ game: game_id, my_game: my_game_id }) => {
 				</form>
 			</div>
 		</div>
-	) : (
-		<></>
 	);
 };
 

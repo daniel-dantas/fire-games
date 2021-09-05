@@ -1,4 +1,5 @@
 import { NextPage } from "next";
+import Link from "next/link";
 import React, { useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import GameCard from "../../components/GameCard";
@@ -23,14 +24,26 @@ const MyLibrary: NextPage = () => {
 	return (
 		<div className={styles.root}>
 			<HeaderBar typeLoad="LOAD_MY_GAMES" />
-			<div className={styles.titleLibrary}>
-				<h3>My Library</h3>
-			</div>
-			<div className={styles.container}>
-				{myGames.map((myGame, index) => (
-					<GameCard key={index} my_game={myGame} type="GAME_MY_LIBRARY" />
-				))}
-			</div>
+			{myGames.length ? (
+				<>
+					<div className={styles.titleLibrary}>
+						<h3>My Library</h3>
+					</div>
+					<div className={styles.container}>
+						{myGames.map((myGame, index) => (
+							<GameCard key={index} my_game={myGame} type="GAME_MY_LIBRARY" />
+						))}
+					</div>
+				</>
+			) : (
+				<div className={styles.containerEmpty}>
+					<h3>
+						Your game library is empty! Add a game from the{" "}
+						<Link href="/library">game library</Link> or register a new one from
+						scratch in <Link href="/library/add">new game</Link>.
+					</h3>
+				</div>
+			)}
 		</div>
 	);
 };

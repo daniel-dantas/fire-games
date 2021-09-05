@@ -1,5 +1,5 @@
 import { HYDRATE } from "next-redux-wrapper";
-import { setCookie } from "nookies";
+import { setCookie, destroyCookie } from "nookies";
 import * as Actions from "../../actions/account";
 
 const initialState = {
@@ -26,7 +26,7 @@ const reducer = function (state = initialState, { type, payload }: any) {
 			};
 		}
 		case Actions.LOGOUT: {
-			setCookie(undefined, "nextauth.token", "", {});
+			destroyCookie(null, "nextauth.token");
 			return {
 				...state,
 				token: ""

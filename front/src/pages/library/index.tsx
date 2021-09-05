@@ -9,6 +9,7 @@ import IState from "../../interfaces/IState";
 import { getGames } from "../../store/actions/games";
 import { parseCookies } from "nookies";
 import widthAuth from "../../hooks/widthAuth";
+import Loading from "../../components/Loading";
 // import { Container } from './styles';
 
 const Library: NextPage = () => {
@@ -25,12 +26,26 @@ const Library: NextPage = () => {
 	return (
 		<div className={styles.root}>
 			<HeaderBar typeLoad="LOAD_GAMES" />
-			<div className={styles.titleLibrary}>{/* <h3>Game Library</h3> */}</div>
-			<div className={styles.container}>
-				{games?.map((game, index) => (
-					<GameCard key={index} game={game} type="GAME_LIBRARY" />
-				))}
-			</div>
+			{games.length ? (
+				<>
+					<div className={styles.titleLibrary}>
+						{/* <h3>Game Library</h3> */}
+					</div>
+
+					<div className={styles.container}>
+						{games?.map((game, index) => (
+							<GameCard key={index} game={game} type="GAME_LIBRARY" />
+						))}
+					</div>
+				</>
+			) : (
+				<div className={styles.containerEmpty}>
+					<h3>
+						Without pre-registered games on the platform, create a new one from
+						scratch!
+					</h3>
+				</div>
+			)}
 		</div>
 	);
 };
