@@ -25,9 +25,7 @@ const Library: NextPage = () => {
 	return (
 		<div className={styles.root}>
 			<HeaderBar typeLoad="LOAD_GAMES" />
-			<div className={styles.titleLibrary}>
-				<h3>Game Library</h3>
-			</div>
+			<div className={styles.titleLibrary}>{/* <h3>Game Library</h3> */}</div>
 			<div className={styles.container}>
 				{games?.map((game, index) => (
 					<GameCard key={index} game={game} type="GAME_LIBRARY" />
