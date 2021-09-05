@@ -12,7 +12,7 @@ import org.springframework.security.core.Authentication;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.web.bind.annotation.*;
 
-@CrossOrigin (origins = "http://localhost:3000")
+@CrossOrigin (origins = "http://localhost:8081")
 @RestController
 @RequestMapping("/auth")
 public class AuthController {

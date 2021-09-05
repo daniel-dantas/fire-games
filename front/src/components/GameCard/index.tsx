@@ -2,7 +2,7 @@ import React, { useCallback } from "react";
 import Image from "next/image";
 
 import styles from "./styles.module.scss";
-import { IMyGame, IGame } from "../../interfaces/IGame";
+import { IMyGame, IGame, EConsole } from "../../interfaces/IGame";
 import { useRouter } from "next/router";
 import { route } from "next/dist/server/router";
 import Badge from "../Badge";
@@ -44,7 +44,17 @@ const GameCard: React.FC<Props> = ({ game, type, my_game }) => {
 				<div className={styles.badge_content}>
 					<Badge>{game ? game?.age : my_game?.game?.age} Years</Badge>
 
-					<Badge>{game ? game?.console : my_game?.game?.console}</Badge>
+					<Badge>
+						{(game ? game?.console : my_game?.game?.console) ===
+						EConsole.NINTENDO_SWITCH
+							? "SWITCH"
+							: (game ? game?.console : my_game?.game?.console) ===
+							  EConsole.XBOX_ONE
+							? "X_ONE"
+							: game
+							? game?.console
+							: my_game?.game?.console}
+					</Badge>
 
 					{my_game && my_game.concluded && <Badge>Concluded</Badge>}
 				</div>

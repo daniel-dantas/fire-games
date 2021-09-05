@@ -3,14 +3,12 @@
   "version": "0.1.0",
   "private": true,
   "scripts": {
-    "dev": "next dev",
+    "dev": "next dev -p 8081",
     "build": "next build",
-    "start": "next start",
+    "start": "next start -p 8081",
     "lint": "next lint"
   },
   "dependencies": {
-    "@material-ui/core": "^4.12.3",
-    "@material-ui/lab": "^4.0.0-alpha.60",
     "add": "^2.0.6",
     "axios": "^0.21.1",
     "ckeditor4-react": "^2.0.1",

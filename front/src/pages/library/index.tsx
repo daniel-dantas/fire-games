@@ -3,7 +3,6 @@ import React, { useEffect, useState } from "react";
 import GameCard from "../../components/GameCard";
 import HeaderBar from "../../components/HeaderBar";
 import styles from "./styles.module.scss";
-import { Pagination } from "@material-ui/lab";
 import { IGame } from "../../interfaces/IGame";
 import { useDispatch, useSelector } from "react-redux";
 import IState from "../../interfaces/IState";
@@ -26,6 +25,9 @@ const Library: NextPage = () => {
 	return (
 		<div className={styles.root}>
 			<HeaderBar typeLoad="LOAD_GAMES" />
+			<div className={styles.titleLibrary}>
+				<h3>Game Library</h3>
+			</div>
 			<div className={styles.container}>
 				{games?.map((game, index) => (
 					<GameCard key={index} game={game} type="GAME_LIBRARY" />

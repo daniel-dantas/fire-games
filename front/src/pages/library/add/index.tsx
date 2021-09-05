@@ -1,4 +1,3 @@
-import { CKEditor } from "ckeditor4-react";
 import { NextPage } from "next";
 import React, { useEffect, useState } from "react";
 import HeaderBar from "../../../components/HeaderBar";
@@ -13,6 +12,7 @@ import { ChangeEvent } from "react";
 import * as yup from "yup";
 import moment from "moment";
 import { useDispatch, useSelector } from "react-redux";
+import { CKEditor } from "ckeditor4-react";
 import {
 	addMyGame,
 	getGame,
@@ -25,6 +25,7 @@ import IError from "../../../interfaces/IError";
 import { useRouter } from "next/router";
 import widthAuth from "../../../hooks/widthAuth";
 import Storage from "../../../services/storage";
+import { toast } from "react-toastify";
 interface Props {
 	game?: string;
 	my_game?: string;
@@ -33,6 +34,7 @@ interface Props {
 const AddGame: NextPage<Props> = ({ game: game_id, my_game: my_game_id }) => {
 	const [frontCoverFile, setFrontCoverFile] = useState<any>(null);
 	const [consoles, setConsoles] = useState<string[]>([]);
+	const [loading, setLoading] = useState<boolean>(false);
 
 	const dispatch = useDispatch();
 	const router = useRouter();
@@ -45,7 +47,7 @@ const AddGame: NextPage<Props> = ({ game: game_id, my_game: my_game_id }) => {
 	const myForm = useFormik({
 		initialValues: {
 			id: my_game_id ? Number(my_game_id) : null,
-			concluded: true,
+			concluded: false,
 			conclusionDate: "",
 			game: {
 				id: game_id ? Number(game_id) : null,
@@ -57,37 +59,45 @@ const AddGame: NextPage<Props> = ({ game: game_id, my_game: my_game_id }) => {
 			personalNotes: ""
 		},
 		validationSchema: yup.object().shape({
-			// "game.title": yup
-			// 	.string()
-			// 	.required("You need to fill in the title of the game")
-			// 	.max(100, "Title cannot exceed 100 characters"),
-			// "game.year": yup
-			// 	.number()
-			// 	.required("You need to fill in the game year")
-			// 	.max(new Date().getFullYear())
-			// 	.min(1970, "The game cannot be older than 1970")
-			// 	.typeError("Invalid year format")
+			conclusionDate: yup.date().max(new Date(), "Cannot use future dates"),
+			game: yup.object().shape({
+				title: yup
+					.string()
+					.required("Game title is required")
+					.max(100, "Title cannot exceed 100 characters"),
+				year: yup
+					.number()
+					.required("Game year is required")
+					.max(new Date().getFullYear(), "The year must be below 2021")
+					.min(1970, "The year must be above 1970")
+					.typeError("Invalid year format")
+			})
 		}),
 		onSubmit: async (values, helpers) => {
 			if (my_game_id) {
 				dispatch(
 					updateMyGame(values as any, (err: IError) => {
+						toast.success("Game updated successfully!");
 						router.push("/my-library");
 					})
 				);
 			} else if (game_id) {
 				dispatch(
 					addMyGame(game_id as any, values as any, (err: IError) => {
+						toast.success("Game added to your library!");
 						router.push("/my-library");
 					})
 				);
 			} else {
+				setLoading(true);
 				dispatch(
 					saveGame(values.game as any, (err: IError, gameId: number) => {
 						if (gameId) {
 							dispatch(
 								addMyGame(gameId as number, values as any, (err: IError) => {
+									toast.success("Game added to your library!");
 									router.push("/my-library");
+									setLoading(false);
 								})
 							);
 						}
@@ -141,7 +151,7 @@ const AddGame: NextPage<Props> = ({ game: game_id, my_game: my_game_id }) => {
 		console.log(game_id);
 	}, [game_id]);
 
-	return (
+	return !loading ? (
 		<div className={styles.root}>
 			<HeaderBar typeLoad="LOAD_GAMES" />
 			<div className={styles.container}>
@@ -177,14 +187,22 @@ const AddGame: NextPage<Props> = ({ game: game_id, my_game: my_game_id }) => {
 									disabled={Boolean(game_id) || Boolean(my_game_id)}
 									{...myForm.getFieldProps("game.title")}
 								/>
+								{myForm.touched.game?.title && myForm.errors.game?.title && (
+									<div className={styles.errorForm}>
+										<span>* {myForm.errors.game?.title}</span>
+									</div>
+								)}
 							</div>
 							<div className={styles.inputGroupTwo}>
-								<input
-									placeholder="Year"
-									type="text"
-									disabled={Boolean(game_id) || Boolean(my_game_id)}
-									{...myForm.getFieldProps("game.year")}
-								/>
+								<div>
+									<input
+										placeholder="Year"
+										type="text"
+										disabled={Boolean(game_id) || Boolean(my_game_id)}
+										{...myForm.getFieldProps("game.year")}
+									/>
+								</div>
+
 								<select
 									defaultValue="PC"
 									{...myForm.getFieldProps("game.console")}
@@ -195,6 +213,11 @@ const AddGame: NextPage<Props> = ({ game: game_id, my_game: my_game_id }) => {
 									))}
 								</select>
 							</div>
+							{myForm.touched.game?.year && myForm.errors.game?.year && (
+								<div className={styles.errorForm}>
+									<span>* {myForm.errors.game?.year}</span>
+								</div>
+							)}
 							<div className={styles.inputGroupTwo}>
 								<label className={styles.concluded} htmlFor="concluded">
 									<input
@@ -208,15 +231,24 @@ const AddGame: NextPage<Props> = ({ game: game_id, my_game: my_game_id }) => {
 									/>
 									<span>Concluded game?</span>
 								</label>
-								<input
-									placeholder="Date of the conclusion"
-									type="date"
-									{...myForm.getFieldProps("conclusionDate")}
-								/>
+								<div>
+									<input
+										placeholder="Date of the conclusion"
+										type="date"
+										{...myForm.getFieldProps("conclusionDate")}
+									/>
+									{myForm.touched.conclusionDate &&
+										myForm.errors.conclusionDate && (
+											<div className={styles.errorForm}>
+												<span>* {myForm.errors.conclusionDate}</span>
+											</div>
+										)}
+								</div>
 							</div>
 							<div className={styles.inputCkEditor}>
 								<h3 className={styles.personalLabel}>Personal Notes</h3>
 								<CKEditor
+									name="personalNotes"
 									data={myForm.values.personalNotes}
 									onChange={(editor: any) =>
 										myForm.setFieldValue(
@@ -260,6 +292,8 @@ const AddGame: NextPage<Props> = ({ game: game_id, my_game: my_game_id }) => {
 				</form>
 			</div>
 		</div>
+	) : (
+		<></>
 	);
 };
 
