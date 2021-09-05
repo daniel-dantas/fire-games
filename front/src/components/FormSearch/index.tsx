@@ -32,7 +32,12 @@ const FormSearch: React.FC<Props> = ({ typeLoad }) => {
 	>(state => state.games);
 
 	const gamesSearch =
-		typeLoad === "LOAD_GAMES" ? games : myGames.map(myGame => myGame.game);
+		typeLoad === "LOAD_GAMES"
+			? games
+			: myGames.map(myGame => {
+					myGame.game.id = myGame.id;
+					return myGame.game;
+			  });
 
 	const handleSearch = async (game: IGame) => {
 		console.log(game);
@@ -78,7 +83,15 @@ const FormSearch: React.FC<Props> = ({ typeLoad }) => {
 							{isOpen
 								? gamesSearch
 										.filter(
-											item => !inputValue || item.title.includes(inputValue)
+											item =>
+												!inputValue ||
+												item.title
+													.toLowerCase()
+													.includes(inputValue.toLowerCase()) ||
+												// item.year?.includes(inputValue) ||
+												item.console
+													.toLowerCase()
+													.includes(inputValue.toLowerCase())
 										)
 										.map((item, index) => (
 											// eslint-disable-next-line react/jsx-key
