@@ -32,15 +32,27 @@
 
 
     }
-    .pagination_container {
-        width: 100vw;
-        padding: 50px 0;
 
-
+    .containerEmpty {
+        // background-color: blue;
+        width: 100%;
+        padding: 0;
+        margin: 0;
+        height: 85vh;
         display: flex;
-
         justify-content: center;
         align-items: center;
+        h3 {
+            text-align: center;
+            width: 40%;
+            font-size: 1.3em;
+            font-weight: 300;
+            color: #bdbdbd;
+            font-style: italic;
+        }
 
+        a {
+            color: var(--secondary);
+        }
     }
 }
