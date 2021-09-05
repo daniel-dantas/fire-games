@@ -23,12 +23,13 @@ import {
 import IState from "../../../interfaces/IState";
 import IError from "../../../interfaces/IError";
 import { useRouter } from "next/router";
+import widthAuth from "../../../hooks/widthAuth";
 interface Props {
-	game_id?: string;
-	my_game_id?: string;
+	game?: string;
+	my_game?: string;
 }
 
-const AddGame: NextPage<Props> = ({ game_id, my_game_id }) => {
+const AddGame: NextPage<Props> = ({ game: game_id, my_game: my_game_id }) => {
 	const [frontCoverFile, setFrontCoverFile] = useState<any>(null);
 	const [consoles, setConsoles] = useState<string[]>([]);
 
@@ -74,7 +75,11 @@ const AddGame: NextPage<Props> = ({ game_id, my_game_id }) => {
 					})
 				);
 			} else if (game_id) {
-				dispatch(addMyGame(game_id as any, values as any));
+				dispatch(
+					addMyGame(game_id as any, values as any, (err: IError) => {
+						router.push("/my-library");
+					})
+				);
 			} else {
 				dispatch(
 					saveGame(values.game as any, (err: IError, gameId: number) => {
@@ -258,8 +263,6 @@ const AddGame: NextPage<Props> = ({ game_id, my_game_id }) => {
 	);
 };
 
-(AddGame as NextPage).getInitialProps = ({ query }) => {
-	return { game_id: query.game, my_game_id: query.my_game };
-};
-
 export default AddGame;
+
+export const getServerSideProps = widthAuth;

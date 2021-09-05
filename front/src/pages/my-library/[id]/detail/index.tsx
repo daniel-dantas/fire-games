@@ -18,6 +18,7 @@ import { deleteMygame, getMyGame } from "../../../../store/actions/games";
 import Swal from "sweetalert2";
 import IError from "../../../../interfaces/IError";
 import { toast } from "react-toastify";
+import widthAuth from "../../../../hooks/widthAuth";
 
 const Detail: NextPage = () => {
 	const router = useRouter();
@@ -128,3 +129,5 @@ const Detail: NextPage = () => {
 };
 
 export default Detail;
+
+export const getServerSideProps = widthAuth;

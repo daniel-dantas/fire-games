@@ -1,4 +1,4 @@
-import { NextPage } from "next";
+import { GetServerSideProps, NextPage } from "next";
 import React, { useEffect, useState } from "react";
 import GameCard from "../../components/GameCard";
 import HeaderBar from "../../components/HeaderBar";
@@ -8,6 +8,8 @@ import { IGame } from "../../interfaces/IGame";
 import { useDispatch, useSelector } from "react-redux";
 import IState from "../../interfaces/IState";
 import { getGames } from "../../store/actions/games";
+import { parseCookies } from "nookies";
+import widthAuth from "../../hooks/widthAuth";
 // import { Container } from './styles';
 
 const Library: NextPage = () => {
@@ -34,3 +36,5 @@ const Library: NextPage = () => {
 };
 
 export default Library;
+
+export const getServerSideProps = widthAuth;

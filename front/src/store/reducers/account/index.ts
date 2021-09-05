@@ -1,4 +1,5 @@
 import { HYDRATE } from "next-redux-wrapper";
+import { setCookie } from "nookies";
 import * as Actions from "../../actions/account";
 
 const initialState = {
@@ -9,10 +10,11 @@ const initialState = {
 
 const reducer = function (state = initialState, { type, payload }: any) {
 	switch (type) {
-		// case HYDRATE: {
-		// 	return { ...state, ...payload };
-		// }
+		case HYDRATE: {
+			return { ...state, ...payload };
+		}
 		case Actions.SUBMIT_LOGIN: {
+			setCookie(undefined, "nextauth.token", payload.token, {});
 			return {
 				...state,
 				token: payload.token
@@ -21,6 +23,13 @@ const reducer = function (state = initialState, { type, payload }: any) {
 		case Actions.SUBMIT_REGISTER: {
 			return {
 				...state
+			};
+		}
+		case Actions.LOGOUT: {
+			setCookie(undefined, "nextauth.token", "", {});
+			return {
+				...state,
+				token: ""
 			};
 		}
 		default: {

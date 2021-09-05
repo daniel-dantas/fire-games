@@ -1,6 +1,6 @@
 import { style } from "@material-ui/system";
 import { useFormik } from "formik";
-import { NextPage } from "next";
+import { GetServerSideProps, NextPage } from "next";
 import { useRouter } from "next/router";
 import React, { useCallback, useState } from "react";
 import { useDispatch } from "react-redux";
@@ -12,6 +12,7 @@ import * as yup from "yup";
 
 import styles from "./styles.module.scss";
 import { route } from "next/dist/server/router";
+import { parseCookies } from "nookies";
 
 const Home: NextPage = () => {
 	const router = useRouter();
