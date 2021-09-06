@@ -19,10 +19,10 @@ export function submitLogin(loginData: ILogin, callback?: Function) {
 			});
 
 			return callback && callback();
-		} catch (err) {
+		} catch (err: any) {
 			let error: IError = {};
 
-			if (err.response.status === 401) {
+			if (err && err?.response?.status === 401) {
 				error.unauthorized = "Incorrect email or password";
 			}
 
@@ -46,12 +46,9 @@ export function submitRegister(registerData: ILogin, callback?: Function) {
 			dispatch(submitLogin(registerData));
 
 			return callback && callback(null);
-		} catch (err) {
+		} catch (err: any) {
 			console.log(err);
 			let error: IError = {};
-
-			console.log("ERROR");
-			console.log(err?.response?.status);
 
 			if (err?.response?.status === 409) {
 				error.conflict = "There is already an account with this email";
