@@ -33,3 +33,13 @@ services:
       - "8080:8080"
     depends_on:
       - postgres
+  front-app:
+    container_name: firegames_app_front
+    image: node:14-alpine
+    build: ./front
+    environment:
+      - BACK_API=http://app:8080
+    ports:
+      - "3000:3000"
+    depends_on:
+      - app
