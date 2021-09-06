@@ -30,19 +30,54 @@ Despite the difficulties in developing the back, everything was successfully imp
 - [#6 Implement documentation with swagger on routes](https://github.com/daniel-dantas/fire-games/issues/7)
 - [#7 Put applications to run in containers](https://github.com/daniel-dantas/fire-games/issues/12)
 
-##
-
 ## Requirements to run the application
 
 - [Docker](https://www.docker.com/get-started)
 - [Docker Compose](https://docs.docker.com/get-started/08_using_compose/)
+- [NodeJS]([https://nodejs.org/pt-br/download/])
+
+## Execution Notes
+
+Due to a problem with configuring the container to use nextjs application, which normally didn't execute **_getServerSideProps_** functions. The frontEnd application starts running outside the containers.
 
 ## How to run the application
 
-With bash in the root of the application run the command below
+With bash in the root of the application, run the command below to run the application's database and backEnd
 
 ```
 docker-compose up -d
+```
+
+To run the front end, enter your bash into the front folder, and run the command below to install the dependencies:
+
+```
+npm install
+```
+
+Then, still inside the front folder, run the command below to run the front application:
+
+```
+npm run build && npm run start
+```
+
+After executing the commands, the application will be available on the following links:
+
+App
+
+```
+http://localhost:3000
+```
+
+Back-API
+
+```
+http://localhost:8080
+```
+
+Swagger Documentation Routes
+
+```
+http://localhost:8080/swagger-ui.html
 ```
 
 ## How to stop the application
